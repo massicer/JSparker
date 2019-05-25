@@ -6,7 +6,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.core.Response;
  
 @Path("/status")
-public class CiaoService {
+public class StatusService {
  
 	@GET
 	@Path("/health")

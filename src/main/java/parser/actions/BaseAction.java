@@ -27,6 +27,7 @@ public abstract class BaseAction extends Object{
 
         this.sequenceNumber = sequenceNumber;
         this.type = type;
+        this.jsAssociated = js;
     }
 
     public JSONObject getJsAssociated() {

@@ -52,7 +52,7 @@ public class GrafterizerParser {
 
             // 1. extract pipelines
             JSONArray pipelineArray;
-            if (!js.isNull(PipelineField.PIPELINES.getVal())) {
+            if (js.isNull(PipelineField.PIPELINES.getVal())) {
                 throw new GrafterizerParserException("GrafterizerParser - parsePipelineJson() - pipeline(s) field is missing in json");
             }
             pipelineArray = js.getJSONArray(PipelineField.PIPELINES.getVal());
@@ -92,9 +92,11 @@ public class GrafterizerParser {
 
             // extract function element
             JSONArray functionObj = jA.getJSONObject(i).getJSONArray(PipelineField.FUNCTIONS.getVal());
+            LogManager.getShared().logInfo(
+                    "GrafterizerParser - parseEachFunctionInEachPipeline() - function obj of index # "+i+ " "+functionObj+ " with length of: "+functionObj.length());
 
             // extract each actions
-            for(int j = 0; i<functionObj.length(); j++){
+            for(int j = 0; j<functionObj.length(); j++){
 
                 LogManager.getShared().logInfo(
                         "GrafterizerParser - parseEachFunctionInEachPipeline() - Preparing to parse function at index # "+j +" of pipeline at index: "+i);

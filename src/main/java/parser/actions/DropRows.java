@@ -11,7 +11,6 @@ public class DropRows extends BaseAction {
     private int indexFrom;
     private int indexTo;
 
-
     public DropRows(JSONObject js, int sequenceNumber) throws ActionException {
         super(js, sequenceNumber, ActionType.DEFAULT);
 
@@ -19,7 +18,7 @@ public class DropRows extends BaseAction {
         try {
 
             // 0.A Name
-            if (!js.isNull(EnumActionField.NAME.getVal()))
+            if (js.isNull(EnumActionField.NAME.getVal()))
                 throw new ActionException("Error while creating Drop Rows function. Name is not present");
             super.setName(js.getString(EnumActionField.NAME.getVal()));
 
@@ -28,12 +27,12 @@ public class DropRows extends BaseAction {
                 throw new ActionException("Error while creating Drop Rows function. Name is not conformed");
 
             // 1. Index From
-            if (!js.isNull(EnumActionField.INDEX_FROM.getVal()))
+            if (js.isNull(EnumActionField.INDEX_FROM.getVal()))
                 throw new ActionException("Error while creating Drop Rows function. Index From is not present");
             this.indexFrom = js.getInt(EnumActionField.INDEX_FROM.getVal());
 
             // 2. Index To
-            if (!js.isNull(EnumActionField.INDEX_TO.getVal()))
+            if (js.isNull(EnumActionField.INDEX_TO.getVal()))
                 throw new ActionException("Error while creating Drop Rows function. Index To is not present");
             this.indexTo = js.getInt(EnumActionField.INDEX_TO.getVal());
 
@@ -44,4 +43,40 @@ public class DropRows extends BaseAction {
         LogManager.getShared().logSuccess("Drop rows function parsed");
 
     }
+    
+    @Override
+    public boolean equals(Object obj) {
+    	
+    	if(obj != null &&
+    			obj instanceof DropRows) {
+    		
+    		DropRows copy = (DropRows) obj;
+    		
+    		return copy.getName().equals(this.getName()) &&
+    				copy.indexFrom == this.indexFrom &&
+    				copy.indexTo == this.indexTo;
+    				
+    	}else {
+    		return false;
+    	}
+    			
+    }
+
+	public int getIndexFrom() {
+		return indexFrom;
+	}
+
+	public void setIndexFrom(int indexFrom) {
+		this.indexFrom = indexFrom;
+	}
+
+	public int getIndexTo() {
+		return indexTo;
+	}
+
+	public void setIndexTo(int indexTo) {
+		this.indexTo = indexTo;
+	}
+    
+    
 }
