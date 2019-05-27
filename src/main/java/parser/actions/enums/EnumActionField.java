@@ -2,19 +2,6 @@ package parser.actions.enums;
 
 public enum EnumActionField {
 
-    /*
-    {
-        "isPreviewed": false,
-        "indexFrom": 0,
-        "indexTo": 2,
-        "name": "drop-rows",
-        "displayName": "drop-rows",
-        "docstring": "Drop 2 first row(s)",
-        "take": false,
-        "__type": "DropRowsFunction",
-        "$$hashKey": "object:246"
-     */
-
     // values
     NAME("name"),
     DISPLAY_NAME("displayName"),
@@ -22,7 +9,9 @@ public enum EnumActionField {
     TAKE("take"),
     ISPREVIEWED("isPreviewed"),
     INDEX_FROM("indexFrom"),
-    INDEX_TO("indexTo");
+    INDEX_TO("indexTo"),
+    COLUMNS_ARRAY("columnsArray"),
+    FAB_IS_OPEN("fabIsOpen");
 
     private String field;
 
