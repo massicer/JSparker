@@ -50,7 +50,7 @@ public class DropRows extends BaseAction {
     @Override
     public Dataset<Row> actionToExecute(Dataset<Row> input) {
     
-    	input.filter((FilterFunction<Row>) r -> (r).getInt(0) >= indexFrom && (r).getInt(0) < indexTo);
+    	input = input.filter((FilterFunction<Row>) r -> (r).getInt(0) >= indexFrom && (r).getInt(0) < indexTo);
     	
     	return input;
     }

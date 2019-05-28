@@ -203,7 +203,7 @@ public class AddColumns extends BaseAction {
 	public Dataset<Row> actionToExecute(Dataset<Row> input) {
 	
 		for(SingleColumn cl : this.columns) {
-			input.withColumn(cl.colName, functions.lit(cl.colValue));
+			input = input.withColumn(cl.colName, functions.lit(cl.colValue));
 		}
 		return input;
 	}
