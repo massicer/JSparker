@@ -12,6 +12,7 @@ public enum EnumActionField {
     INDEX_TO("indexTo"),
     COLUMNS_ARRAY("columnsArray"),
     VALUES("values"),
+    MAPPINGS("mappings"),
     FAB_IS_OPEN("fabIsOpen");
 
     private String field;

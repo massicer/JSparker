@@ -20,7 +20,8 @@ public class PipelineTest {
 	@Test
 	public void testParseAndExecuteDropRows() {
 		
-		String json = "{\"pipelines\": [\n" + 
+		String json = "{\"pipelines\": "
+				+ "[\n" + 
 				"    {\n" + 
 				"    \"functions\": [\n" + 
 				"    {\n" + 
@@ -139,6 +140,7 @@ public class PipelineTest {
 	        result.show();
 	        
 	}
+<<<<<<< HEAD
 	
 	@Test
 	public void testParseAndExecuteAddRow() {
@@ -181,6 +183,32 @@ public class PipelineTest {
 				"         \"__type\": \"Pipeline\"\n" + 
 				"      }\n" + 
 				"   ]\n" + 
+=======
+
+	@Test
+	public void testParseAndExecuteRenameColumns() {
+		
+		try {
+		
+		String json = "{\n" + 
+				"	\"pipelines\": [{\n" + 
+				"		\"functions\": [{\n" + 
+				"			\"isPreviewed\": false,\n" + 
+				"			\"name\": \"rename-columns\",\n" + 
+				"			\"displayName\": \"rename-columns\",\n" + 
+				"			\"mappings\": [{\n" + 
+				"				\"id\": 1,\n" + 
+				"				\"value\": \"name\"\n" + 
+				"			}, \"new\", {\n" + 
+				"				\"id\": 2,\n" + 
+				"				\"value\": \"sex\"\n" + 
+				"			}, \"newme\"],\n" + 
+				"			\"functionsToRenameWith\": [null],\n" + 
+				"			\"__type\": \"RenameColumnsFunction\",\n" + 
+				"			\"docstring\": \"Rename columns\"\n" + 
+				"		}]\n" + 
+				"	}]\n" + 
+>>>>>>> eeda357faa8cdcb981339f54eb9ce5ef3e0e5f17
 				"}";
 		
 		
@@ -213,11 +241,25 @@ public class PipelineTest {
 	        Dataset<Row> dataset = sqlContext.read()
 	                .option("header", true)
 	                .csv("example-data.csv"); //comment option if you dont want an header
+<<<<<<< HEAD
 	        
 	        
 	      
 	        Dataset<Row> result = PipelineExecutor.getShared().executePipeline(pipelineParsed, dataset);
 	        result.show();
 	        
+=======
+	        dataset.show();
+	        
+	        
+	      
+	        dataset = PipelineExecutor.getShared().executePipeline(pipelineParsed, dataset);
+	        dataset.show();
+	        
+		}catch(Exception e) {
+			fail("Excp occurred");
+			e.printStackTrace();
+		}
+>>>>>>> eeda357faa8cdcb981339f54eb9ce5ef3e0e5f17
 	}
 }
