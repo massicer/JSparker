@@ -3,10 +3,13 @@ package parser.actions;
 import org.apache.spark.api.java.function.FilterFunction;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
+import org.apache.spark.sql.functions;
 import org.json.JSONObject;
 import parser.actions.enums.ActionName;
 import parser.actions.enums.EnumActionField;
 import utility.LogManager;
+import org.apache.spark.sql.functions$;
+import org.apache.spark.sql.expressions.Window; 
 
 public class DropRows extends BaseAction {
 
@@ -49,8 +52,11 @@ public class DropRows extends BaseAction {
     
     @Override
     public Dataset<Row> actionToExecute(Dataset<Row> input) {
-    
-    	input = input.filter((FilterFunction<Row>) r -> (r).getInt(0) >= indexFrom && (r).getInt(0) < indexTo);
+    	input = input.withColumn("index",functions.monotonically_increasing_id());
+    	int colIndex = input.columns().length - 1;
+    	input = input.filter((FilterFunction<Row>) r -> (r).getLong(colIndex) <= indexFrom || (r).getLong(colIndex) >= indexTo);
+    	//FilterFunction<Row> r = new FilterFunc
+    	//input.filter(FilterFunction);
     	
     	return input;
     }

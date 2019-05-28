@@ -63,18 +63,16 @@ public class PipelineTest {
 	                .getOrCreate();
 
 
-	        SQLContext sqlContext = sparkSession.sqlContext();
-	        Dataset<Row> dataset = sqlContext.read()
-	                .option("header", true)
-	                .csv("example-data.csv"); //comment option if you dont want an header
-	        dataset.show();
-	        
-	        
-	      
-	        PipelineExecutor.getShared().executePipeline(pipelineParsed, dataset);
-	        dataset.show();
-	        
-	        
+        SQLContext sqlContext = sparkSession.sqlContext();
+        Dataset<Row> dataset = sqlContext.read()
+                .option("header", true)
+                .csv("example-data.csv"); //comment option if you dont want an header
+        //dataset.show();
+        
+        
+      
+        Dataset<Row> result = PipelineExecutor.getShared().executePipeline(pipelineParsed, dataset);
+        result.show();
 	}
 
 	@Test
@@ -134,13 +132,11 @@ public class PipelineTest {
 	        Dataset<Row> dataset = sqlContext.read()
 	                .option("header", true)
 	                .csv("example-data.csv"); //comment option if you dont want an header
-	        dataset.show();
 	        
 	        
 	      
-	        PipelineExecutor.getShared().executePipeline(pipelineParsed, dataset);
-	        dataset.show();
-	        
+	        Dataset<Row> result = PipelineExecutor.getShared().executePipeline(pipelineParsed, dataset);
+	        result.show();
 	        
 	}
 }
