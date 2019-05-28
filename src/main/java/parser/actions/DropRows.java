@@ -1,5 +1,7 @@
 package parser.actions;
 
+import static org.apache.spark.sql.functions.col;
+
 import org.apache.spark.api.java.function.FilterFunction;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
@@ -8,8 +10,6 @@ import org.json.JSONObject;
 import parser.actions.enums.ActionName;
 import parser.actions.enums.EnumActionField;
 import utility.LogManager;
-import org.apache.spark.sql.functions$;
-import org.apache.spark.sql.expressions.Window; 
 
 public class DropRows extends BaseAction {
 
@@ -54,9 +54,11 @@ public class DropRows extends BaseAction {
     public Dataset<Row> actionToExecute(Dataset<Row> input) {
     	input = input.withColumn("index",functions.monotonically_increasing_id());
     	int colIndex = input.columns().length - 1;
-    	input = input.filter((FilterFunction<Row>) r -> (r).getLong(colIndex) <= indexFrom || (r).getLong(colIndex) >= indexTo);
-    	//FilterFunction<Row> r = new FilterFunc
-    	//input.filter(FilterFunction);
+    	final int iS = indexFrom;
+    	final int iE = indexTo;
+    	input = input.filter((FilterFunction<Row>) r -> ((r).getLong(colIndex) <= iS || (r).getLong(colIndex) >= iE));
+    	
+    	input = input.drop(col("index")); // remove column at the end
     	
     	return input;
     }
