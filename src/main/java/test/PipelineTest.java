@@ -140,20 +140,16 @@ public class PipelineTest {
 	        result.show();
 	        
 	}
-<<<<<<< HEAD
 	
 	@Test
 	public void testParseAndExecuteAddRow() {
-		
 		String json = "{\n" + 
-				"   \"pipelines\": [\n" + 
-				"      {\n" + 
-				"         \"functions\": [\n" + 
-				"            {\n" + 
-				"               \"name\": \"add-row\",\n" + 
-				"               \"displayName\": \"add-row\",\n" + 
-				"               \"isPreviewed\": false,\n" + 
-				"               \"position\": 0,\n" + 
+				"	\"pipelines\": [{\n" + 
+				"		\"functions\": [{\n" + 
+				"			\"name\": \"add-row\",\n" + 
+				"			\"displayName\": \"add-row\",\n" + 
+				"			\"isPreviewed\": true,\n" + 
+				"			\"position\": 0,\n" + 
 				"               \"values\": [\n" + 
 				"                  \"Davide\",\n" + 
 				"                  \"m\",\n" + 
@@ -161,29 +157,46 @@ public class PipelineTest {
 				"                  \"boh\",\n" + 
 				"                  \"60\"\n" + 
 				"               ],\n" + 
-				"               \"__type\": \"AddRowFunction\",\n" + 
-				"               \"docstring\": \"Add rows\"\n" + 
-				"            },\n" + 
-				"            {\n" + 
-				"               \"name\": \"add-row\",\n" + 
-				"               \"displayName\": \"add-row\",\n" + 
-				"               \"isPreviewed\": true,\n" + 
-				"               \"position\": 0,\n" + 
-				"               \"values\": [\n" + 
-				"                  \"Max\",\n" + 
-				"                  \"m\",\n" + 
-				"                  \"30\",\n" + 
-				"                  \"boh\",\n" + 
-				"                  \"70\"\n" + 
-				"               ],\n" + 
-				"               \"__type\": \"AddRowFunction\",\n" + 
-				"               \"docstring\": \"Add rows\"\n" + 
-				"            }\n" + 
-				"         ],\n" + 
-				"         \"__type\": \"Pipeline\"\n" + 
-				"      }\n" + 
-				"   ]\n" + 
-=======
+				"			\"__type\": \"AddRowFunction\",\n" + 
+				"			\"docstring\": \"Add rows\"\n" + 
+				"		}],\n" + 
+				"		\"__type\": \"Pipeline\"\n" + 
+				"	}]\n" + 
+				"}";
+		
+		JSONObject js = null;
+		try {
+			js = new JSONObject(json);
+		}catch(Exception e) {
+			e.printStackTrace();
+			fail("Excp occurred");
+		}
+		
+		// Is a json so parse it
+		GrafterizerParser parser = new GrafterizerParser();
+		ArrayList<Pipeline>  pipelineParsed = null;
+		try {
+			pipelineParsed = parser.parsePipelineJson(js);
+		}catch(Exception e) {
+			e.printStackTrace();
+			fail("Excp during parser occurred");
+		}
+		
+		// create simple Dataframe
+		 SparkSession sparkSession = SparkSession.builder()
+	                .appName("jsonSparker")
+	                .master("local")
+	                .getOrCreate();
+
+
+	        SQLContext sqlContext = sparkSession.sqlContext();
+	        Dataset<Row> dataset = sqlContext.read()
+	                .option("header", true)
+	                .csv("example-data.csv"); //comment option if you dont want an header
+        Dataset<Row> result = PipelineExecutor.getShared().executePipeline(pipelineParsed, dataset);
+	    result.show();
+    }
+	
 
 	@Test
 	public void testParseAndExecuteRenameColumns() {
@@ -208,7 +221,6 @@ public class PipelineTest {
 				"			\"docstring\": \"Rename columns\"\n" + 
 				"		}]\n" + 
 				"	}]\n" + 
->>>>>>> eeda357faa8cdcb981339f54eb9ce5ef3e0e5f17
 				"}";
 		
 		
@@ -241,14 +253,12 @@ public class PipelineTest {
 	        Dataset<Row> dataset = sqlContext.read()
 	                .option("header", true)
 	                .csv("example-data.csv"); //comment option if you dont want an header
-<<<<<<< HEAD
 	        
 	        
 	      
 	        Dataset<Row> result = PipelineExecutor.getShared().executePipeline(pipelineParsed, dataset);
 	        result.show();
 	        
-=======
 	        dataset.show();
 	        
 	        
@@ -260,6 +270,5 @@ public class PipelineTest {
 			fail("Excp occurred");
 			e.printStackTrace();
 		}
->>>>>>> eeda357faa8cdcb981339f54eb9ce5ef3e0e5f17
 	}
 }
