@@ -2,6 +2,9 @@ package parser.actions;
 
 import java.util.ArrayList;
 
+import org.apache.spark.sql.Dataset;
+import org.apache.spark.sql.Row;
+import org.apache.spark.sql.functions;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -194,6 +197,15 @@ public class AddColumns extends BaseAction {
 
 	public void setColumns(ArrayList<SingleColumn> columns) {
 		this.columns = columns;
+	}
+
+	@Override
+	public Dataset<Row> actionToExecute(Dataset<Row> input) {
+	
+		for(SingleColumn cl : this.columns) {
+			input.withColumn(cl.colName, functions.lit(cl.colValue));
+		}
+		return input;
 	}
 
 }

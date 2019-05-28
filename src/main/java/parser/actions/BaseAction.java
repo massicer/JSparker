@@ -1,5 +1,7 @@
 package parser.actions;
 
+import org.apache.spark.sql.Dataset;
+import org.apache.spark.sql.Row;
 import org.json.JSONObject;
 
 /*
@@ -29,6 +31,8 @@ public abstract class BaseAction extends Object{
         this.type = type;
         this.jsAssociated = js;
     }
+    
+    public abstract Dataset<Row>  actionToExecute(Dataset<Row>  input);
 
     public JSONObject getJsAssociated() {
         return jsAssociated;
