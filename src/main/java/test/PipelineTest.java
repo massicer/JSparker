@@ -200,7 +200,7 @@ public class PipelineTest {
 	        
 	        
 	      
-	        PipelineExecutor.getShared().executePipeline(pipelineParsed, dataset);
+	        dataset = PipelineExecutor.getShared().executePipeline(pipelineParsed, dataset);
 	        dataset.show();
 	        
 		}catch(Exception e) {

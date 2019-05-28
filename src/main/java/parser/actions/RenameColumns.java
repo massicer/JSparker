@@ -104,11 +104,14 @@ public class RenameColumns extends BaseAction {
 	@Override
 	public Dataset<Row> actionToExecute(Dataset<Row> input) {
 		
+		Dataset<Row> currentInput = input;
+		
 		for(Mapping singleMap: this.mapping) {
 			LogManager.getShared().logInfo("Single mapping in consideration: "+singleMap.oldName + " "+ singleMap.newName );
-			input = input.withColumnRenamed(singleMap.oldName, singleMap.newName);
+			currentInput = currentInput.withColumnRenamed(singleMap.oldName, singleMap.newName);
 		}
-	    return input;
+		// currentInput.show();
+	    return currentInput;
 	}
 
 }
