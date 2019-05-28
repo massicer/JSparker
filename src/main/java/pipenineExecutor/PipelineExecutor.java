@@ -18,16 +18,16 @@ public class PipelineExecutor {
 		return shared;
 	}
 
-	public void executePipeline( ArrayList<Pipeline> pipelines, Dataset<Row>  input) {
+	public Dataset<Row> executePipeline( ArrayList<Pipeline> pipelines, Dataset<Row> input) {
 		
 		if( pipelines == null) {
 			LogManager.getShared().logError("executePipeline - pipelines are null");
-			return;
+			return input;
 		}
 		
 		if( input == null) {
 			LogManager.getShared().logError("executePipeline - inputnull");
-			return;
+			return input;
 		}
 		
 		
@@ -37,11 +37,11 @@ public class PipelineExecutor {
 			
 			for(BaseAction act: pip.getActions()) {
 				
-				act.actionToExecute(input);
+				input = act.actionToExecute(input);
 			}
 		}
 		
 		LogManager.getShared().logSuccess("executePipeline - Pipeline(s) executed correctly");
-		
+		return input;
 	}
 }
