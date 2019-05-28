@@ -4,6 +4,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import parser.actions.AddColumns;
+import parser.actions.AddRow;
 import parser.actions.BaseAction;
 import parser.actions.DropRows;
 import parser.actions.enums.ActionName;
@@ -135,7 +136,11 @@ public class GrafterizerParser {
             case ActionName.ADD_COLUMNS :
                 LogManager.getShared().logInfo("GrafterizerParser - parseAction() - add columns action detected");
                 return new AddColumns(actJs, progressNumber);
-
+            
+            case ActionName.ADD_ROW:
+            	LogManager.getShared().logInfo("GrafterizerParser - parseAction() - add row action detected");
+            	return new AddRow(actJs, progressNumber);
+            
             default:
                 LogManager.getShared().logError("GrafterizerParser - parseAction() -  action NOT detected");
                 return null;
