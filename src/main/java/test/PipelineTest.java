@@ -20,7 +20,8 @@ public class PipelineTest {
 	@Test
 	public void testParseAndExecuteDropRows() {
 		
-		String json = "{\"pipelines\": [\n" + 
+		String json = "{\"pipelines\": "
+				+ "[\n" + 
 				"    {\n" + 
 				"    \"functions\": [\n" + 
 				"    {\n" + 
@@ -142,5 +143,73 @@ public class PipelineTest {
 	        dataset.show();
 	        
 	        
+	}
+
+	@Test
+	public void testParseAndExecuteRenameColumns() {
+		
+		try {
+		
+		String json = "{\n" + 
+				"	\"pipelines\": [{\n" + 
+				"		\"functions\": [{\n" + 
+				"			\"isPreviewed\": false,\n" + 
+				"			\"name\": \"rename-columns\",\n" + 
+				"			\"displayName\": \"rename-columns\",\n" + 
+				"			\"mappings\": [{\n" + 
+				"				\"id\": 1,\n" + 
+				"				\"value\": \"name\"\n" + 
+				"			}, \"new\", {\n" + 
+				"				\"id\": 2,\n" + 
+				"				\"value\": \"sex\"\n" + 
+				"			}, \"newme\"],\n" + 
+				"			\"functionsToRenameWith\": [null],\n" + 
+				"			\"__type\": \"RenameColumnsFunction\",\n" + 
+				"			\"docstring\": \"Rename columns\"\n" + 
+				"		}]\n" + 
+				"	}]\n" + 
+				"}";
+		
+		
+		JSONObject js = null;
+		try {
+			js = new JSONObject(json);
+		}catch(Exception e) {
+			e.printStackTrace();
+			fail("Excp occurred");
+		}
+		
+		// Is a json so parse it
+		GrafterizerParser parser = new GrafterizerParser();
+		ArrayList<Pipeline>  pipelineParsed = null;
+		try {
+			pipelineParsed = parser.parsePipelineJson(js);
+		}catch(Exception e) {
+			e.printStackTrace();
+			fail("Excp during parser occurred");
+		}
+		
+		// create simple Dataframe
+		 SparkSession sparkSession = SparkSession.builder()
+	                .appName("jsonSparker")
+	                .master("local")
+	                .getOrCreate();
+
+
+	        SQLContext sqlContext = sparkSession.sqlContext();
+	        Dataset<Row> dataset = sqlContext.read()
+	                .option("header", true)
+	                .csv("example-data.csv"); //comment option if you dont want an header
+	        dataset.show();
+	        
+	        
+	      
+	        PipelineExecutor.getShared().executePipeline(pipelineParsed, dataset);
+	        dataset.show();
+	        
+		}catch(Exception e) {
+			fail("Excp occurred");
+			e.printStackTrace();
+		}
 	}
 }

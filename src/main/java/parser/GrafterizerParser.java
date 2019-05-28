@@ -6,6 +6,7 @@ import org.json.JSONObject;
 import parser.actions.AddColumns;
 import parser.actions.BaseAction;
 import parser.actions.DropRows;
+import parser.actions.RenameColumns;
 import parser.actions.enums.ActionName;
 import parser.actions.enums.EnumActionField;
 import parser.pipeline.GrafterizerParserException;
@@ -136,6 +137,10 @@ public class GrafterizerParser {
                 LogManager.getShared().logInfo("GrafterizerParser - parseAction() - add columns action detected");
                 return new AddColumns(actJs, progressNumber);
 
+            case ActionName.RENAME_COLUMNS:
+            	LogManager.getShared().logInfo("GrafterizerParser - parseAction() - rename columns action detected");
+                return new RenameColumns(actJs, progressNumber);
+            	
             default:
                 LogManager.getShared().logError("GrafterizerParser - parseAction() -  action NOT detected");
                 return null;
