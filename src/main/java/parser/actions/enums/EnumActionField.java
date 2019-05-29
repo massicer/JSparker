@@ -13,7 +13,11 @@ public enum EnumActionField {
     VALUES("values"),
     MAPPINGS("mappings"),
     FAB_IS_OPEN("fabIsOpen"),
-	TAKE("take");
+	TAKE("take"),
+	IGNORECASE("ignoreCase"),
+	FILTER_TEXT("filterText"),
+	FILTER_REGEX("filterRegex"),
+	COLS_TO_FILTER("colsToFilter");
 
     private String field;
 

@@ -7,6 +7,7 @@ import parser.actions.AddColumns;
 import parser.actions.AddRow;
 import parser.actions.BaseAction;
 import parser.actions.DropRows;
+import parser.actions.FilterRows;
 import parser.actions.RenameColumns;
 import parser.actions.ShiftRow;
 import parser.actions.enums.ActionName;
@@ -146,6 +147,10 @@ public class GrafterizerParser {
             case ActionName.SHIFT_ROW:
             	LogManager.getShared().logInfo("GrafterizerParser - parseAction() - shift row action detected");
             	return new ShiftRow(actJs, progressNumber);
+            	
+            case ActionName.FILTER_ROWS:
+            	LogManager.getShared().logInfo("GrafterizerParser - parseAction() - shift row action detected");
+            	return new FilterRows(actJs, progressNumber);
 
             case ActionName.RENAME_COLUMNS:
             	LogManager.getShared().logInfo("GrafterizerParser - parseAction() - rename columns action detected");
