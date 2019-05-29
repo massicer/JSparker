@@ -11,7 +11,6 @@ import parser.actions.FilterRows;
 import parser.actions.RenameColumns;
 import parser.actions.ShiftRow;
 import parser.actions.MergeColumns;
-import parser.actions.RenameColumns;
 import parser.actions.SplitAction;
 import parser.actions.enums.ActionName;
 import parser.actions.enums.EnumActionField;

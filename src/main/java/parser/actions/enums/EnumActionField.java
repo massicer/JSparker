@@ -12,12 +12,11 @@ public enum EnumActionField {
     COLUMNS_ARRAY("columnsArray"),
     VALUES("values"),
     MAPPINGS("mappings"),
-    FAB_IS_OPEN("fabIsOpen"),
 	TAKE("take"),
 	IGNORECASE("ignoreCase"),
 	FILTER_TEXT("filterText"),
 	FILTER_REGEX("filterRegex"),
-	COLS_TO_FILTER("colsToFilter");
+	COLS_TO_FILTER("colsToFilter"),
     SEPARATOR("separator"),
     COLS_TO_MERGE("colsToMerge"),
     NEW_COLUMN_NAME("newColName"),
