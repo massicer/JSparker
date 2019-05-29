@@ -4,10 +4,12 @@ import java.util.ArrayList;
 
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import parser.actions.BaseAction.ActionType;
 import parser.actions.enums.EnumActionField;
+import utility.LogManager;
 
 /*
  * ° THERE ARE TWO TYPES OF WAY TO TAKE COLUMNS: by id range and by column name
@@ -103,15 +105,28 @@ public class TakeColumns extends BaseAction {
 			if( (js.isNull(EnumActionField.INDEX_FROM.getVal()) || js.isNull(EnumActionField.INDEX_TO.getVal())) &&
 					!js.isNull(EnumActionField.COLUMNS_ARRAY.getVal())){
 				
-				// assign mode
+				// 1.A assign mode
 				workingMode = Mode.FIRST;
 				
+				// 1.B Extract json array of columns
+				JSONArray colArray = js.getJSONArray(EnumActionField.COLUMNS_ARRAY.getVal());
+				
+				// 1.C for each object populate internal list
+				this.columsTarget = new ArrayList<>();
+				
+				for(int i=0; i<colArray.length(); i++) 
+					this.columsTarget.add(new SingleTakeColumn(colArray.getJSONObject(i)));
+					
 				// 0.B Check If is second way
 			} else if ((!js.isNull(EnumActionField.INDEX_FROM.getVal()) && !js.isNull(EnumActionField.INDEX_TO.getVal())) &&
 					js.isNull(EnumActionField.COLUMNS_ARRAY.getVal())) {
 				
-				// assign mode
+				// 2.A assign mode
 				workingMode = Mode.SECOND;
+				
+				// 2.B extract indexFrom and index to
+				this.indexFrom = js.getInt(EnumActionField.INDEX_FROM.getVal());
+				this.indexTo = js.getInt(EnumActionField.INDEX_TO.getVal());
 				
 		
 			}else {
@@ -131,8 +146,21 @@ public class TakeColumns extends BaseAction {
 	
 	@Override
 	public Dataset<Row> actionToExecute(Dataset<Row> input) {
-		// TODO Auto-generated method stub
-		return null;
+		
+		if (workingMode == Mode.FIRST) {
+			
+			input = this.take ? takeRowsFirstWay(input) : takeOtherRowsFirstWay(input);
+			return input;
+			
+		}else if (workingMode == Mode.SECOND) {
+			
+			input = this.take ? takeRowsSecondWay(input) : takeOtherRowsSecondWay(input);
+			return input;
+			
+		}else {
+			LogManager.getShared().logError("TakeColumns - actionToExecute - no mode detected so not action applied");
+			return input;
+		}
 	}
 	
 	// TAKE ROWS - FIRST WAY
