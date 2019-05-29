@@ -8,6 +8,7 @@ import parser.actions.AddRow;
 import parser.actions.BaseAction;
 import parser.actions.DropRows;
 import parser.actions.RenameColumns;
+import parser.actions.ShiftRow;
 import parser.actions.enums.ActionName;
 import parser.actions.enums.EnumActionField;
 import parser.pipeline.GrafterizerParserException;
@@ -141,7 +142,10 @@ public class GrafterizerParser {
             case ActionName.ADD_ROW:
             	LogManager.getShared().logInfo("GrafterizerParser - parseAction() - add row action detected");
             	return new AddRow(actJs, progressNumber);
-            
+            	
+            case ActionName.SHIFT_ROW:
+            	LogManager.getShared().logInfo("GrafterizerParser - parseAction() - shift row action detected");
+            	return new ShiftRow(actJs, progressNumber);
 
             case ActionName.RENAME_COLUMNS:
             	LogManager.getShared().logInfo("GrafterizerParser - parseAction() - rename columns action detected");
