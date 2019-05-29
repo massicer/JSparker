@@ -7,7 +7,9 @@ import parser.actions.AddColumns;
 import parser.actions.AddRow;
 import parser.actions.BaseAction;
 import parser.actions.DropRows;
+import parser.actions.MergeColumns;
 import parser.actions.RenameColumns;
+import parser.actions.SplitAction;
 import parser.actions.enums.ActionName;
 import parser.actions.enums.EnumActionField;
 import parser.pipeline.GrafterizerParserException;
@@ -142,10 +144,17 @@ public class GrafterizerParser {
             	LogManager.getShared().logInfo("GrafterizerParser - parseAction() - add row action detected");
             	return new AddRow(actJs, progressNumber);
             
-
             case ActionName.RENAME_COLUMNS:
             	LogManager.getShared().logInfo("GrafterizerParser - parseAction() - rename columns action detected");
                 return new RenameColumns(actJs, progressNumber);
+                
+            case ActionName.MERGE_COLUMNS:
+            	LogManager.getShared().logInfo("GrafterizerParser - parseAction() - MERGE columns action detected");
+                return new MergeColumns(actJs, progressNumber);
+                
+            case ActionName.SPLIT:
+            	LogManager.getShared().logInfo("GrafterizerParser - parseAction() - SPLIT  action detected");
+                return new SplitAction(actJs, progressNumber);
             	
             default:
                 LogManager.getShared().logError("GrafterizerParser - parseAction() -  action NOT detected");
