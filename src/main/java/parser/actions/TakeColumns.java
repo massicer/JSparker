@@ -168,7 +168,7 @@ public class TakeColumns extends BaseAction {
 	}
 	
 	// TAKE ROWS - FIRST WAY
-	public Dataset<Row> takeRowsFirstWay(Dataset<Row> input) {
+	private Dataset<Row> takeRowsFirstWay(Dataset<Row> input) {
 
 		String[] colulmsString = input.columns();
 		
@@ -190,7 +190,7 @@ public class TakeColumns extends BaseAction {
 	}
 	
 	// TAKE OTHER ROWS - FIRST WAY
-	public Dataset<Row> takeOtherRowsFirstWay(Dataset<Row> input) {
+	private Dataset<Row> takeOtherRowsFirstWay(Dataset<Row> input) {
 	
 		String[] colulmsString = input.columns();
 		
@@ -212,7 +212,7 @@ public class TakeColumns extends BaseAction {
 	}
 	
 	// TAKE ROWS - SECOND WAY (By index range)
-	public Dataset<Row> takeRowsSecondWay(Dataset<Row> input) {
+	private Dataset<Row> takeRowsSecondWay(Dataset<Row> input) {
 		
 		String[] colulmsString = input.columns();
 		
@@ -227,7 +227,7 @@ public class TakeColumns extends BaseAction {
 	}
 	
 	// TAKE OTHER ROWS - SECOND WAY (By Index range)
-	public Dataset<Row> takeOtherRowsSecondWay(Dataset<Row> input) {
+	private Dataset<Row> takeOtherRowsSecondWay(Dataset<Row> input) {
 		
 	String[] colulmsString = input.columns();
 		

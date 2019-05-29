@@ -9,6 +9,7 @@ import parser.actions.BaseAction;
 import parser.actions.DropRows;
 import parser.actions.FilterRows;
 import parser.actions.RenameColumns;
+import parser.actions.ShiftColumn;
 import parser.actions.ShiftRow;
 import parser.actions.MergeColumns;
 import parser.actions.SplitAction;
@@ -172,6 +173,10 @@ public class GrafterizerParser {
             	LogManager.getShared().logInfo("GrafterizerParser - parseAction() - TAKE_COLUMNS  action detected");
                 return new TakeColumns(actJs, progressNumber);
             	
+            case ActionName.SHIFT_COLUMN:
+            	LogManager.getShared().logInfo("GrafterizerParser - parseAction() - SHIFT_COLUMN  action detected");
+                return new ShiftColumn(actJs, progressNumber);
+                
             default:
                 LogManager.getShared().logError("GrafterizerParser - parseAction() -  action NOT detected");
                 return null;
