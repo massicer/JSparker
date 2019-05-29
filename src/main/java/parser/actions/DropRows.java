@@ -14,6 +14,7 @@ import utility.LogManager;
 public class DropRows extends BaseAction {
 
     // Attributes
+	private boolean take; //this action has a boolean inside -> drop or take
     private int indexFrom;
     private int indexTo;
 
@@ -31,6 +32,10 @@ public class DropRows extends BaseAction {
             // 0.B Name Conformed
             if (!super.getName().equals(ActionName.DROP_ROWS))
                 throw new ActionException("Error while creating Drop Rows function. Name is not conformed");
+            
+            if (js.isNull(EnumActionField.TAKE.getVal()))
+            	throw new ActionException("Error while creating Drop Rows function. take is not conformed");
+            this.take = js.getBoolean(EnumActionField.TAKE.getVal());
 
             // 1. Index From
             if (js.isNull(EnumActionField.INDEX_FROM.getVal()))
@@ -56,7 +61,12 @@ public class DropRows extends BaseAction {
     	int colIndex = input.columns().length - 1;
     	final int iS = indexFrom;
     	final int iE = indexTo;
-    	input = input.filter((FilterFunction<Row>) r -> ((r).getLong(colIndex) <= iS || (r).getLong(colIndex) >= iE));
+    	
+    	if(!take) {
+    		input = input.filter((FilterFunction<Row>) r -> ((r).getLong(colIndex) <= iS || (r).getLong(colIndex) >= iE));
+    	} else {
+    		input = input.filter((FilterFunction<Row>) r -> ((r).getLong(colIndex) >= iS && (r).getLong(colIndex) <= iE));
+    	}
     	
     	input = input.drop(col("index")); // remove column at the end
     	

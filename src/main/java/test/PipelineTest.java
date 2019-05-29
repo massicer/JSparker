@@ -16,6 +16,126 @@ import parser.pipeline.Pipeline;
 import pipenineExecutor.PipelineExecutor;
 
 public class PipelineTest {
+	
+	@Test
+	public void testFilterRows() {
+		
+		String json = "{\n" + 
+				"	\"pipelines\": [{\n" + 
+				"		\"functions\": [{\n" + 
+				"			\"isPreviewed\": false,\n" + 
+				"			\"take\": true,\n" + 
+				"			\"grepmode\": \"text\",\n" + 
+				"			\"colsToFilter\": [{\n" + 
+				"				\"id\": 0,\n" + 
+				"				\"value\": \"name\"\n" + 
+				"			}],\n" + 
+				"			\"name\": \"grep\",\n" + 
+				"			\"displayName\": \"grep\",\n" + 
+				"			\"filterRegex\": null,\n" + 
+				"			\"ignoreCase\": true,\n" + 
+				"			\"functionsToFilterWith\": [null],\n" + 
+				"			\"__type\": \"GrepFunction\",\n" + 
+				"			\"docstring\": \"Filter rows\",\n" + 
+				"			\"filterText\": \"alice\"\n" + 
+				"		}]\n" + 
+				"	}]\n" + 
+				"}";
+		
+		
+		JSONObject js = null;
+		try {
+			js = new JSONObject(json);
+		}catch(Exception e) {
+			e.printStackTrace();
+			fail("Excp occurred");
+		}
+		
+		// Is a json so parse it
+		GrafterizerParser parser = new GrafterizerParser();
+		ArrayList<Pipeline>  pipelineParsed = null;
+		try {
+			pipelineParsed = parser.parsePipelineJson(js);
+		}catch(Exception e) {
+			e.printStackTrace();
+			fail("Excp during parser occurred");
+		}
+		
+		// create simple Dataframe
+		 SparkSession sparkSession = SparkSession.builder()
+	                .appName("jsonSparker")
+	                .master("local")
+	                .getOrCreate();
+
+
+        SQLContext sqlContext = sparkSession.sqlContext();
+        Dataset<Row> dataset = sqlContext.read()
+                .option("header", true)
+                .csv("example-data.csv"); //comment option if you dont want an header
+        //dataset.show();
+        
+        
+      
+        Dataset<Row> result = PipelineExecutor.getShared().executePipeline(pipelineParsed, dataset);
+        result.show();
+	}
+	
+	@Test
+	public void testParseAndExecuteShiftRows() {
+		
+		String json = "{\n" + 
+				"	\"pipelines\": [{\n" + 
+				"		\"functions\": [{\n" + 
+				"			\"name\": \"shift-row\",\n" + 
+				"			\"displayName\": \"shift-row\",\n" + 
+				"			\"isPreviewed\": false,\n" + 
+				"			\"indexFrom\": 4,\n" + 
+				"			\"indexTo\": 0,\n" + 
+				"			\"shiftrowmode\": \"position\",\n" + 
+				"			\"__type\": \"ShiftRowFunction\",\n" + 
+				"			\"docstring\": \"Shift (move) row\"\n" + 
+				"		}],\n" + 
+				"		\"__type\": \"Pipeline\"\n" + 
+				"	}]\n" + 
+				"}";
+		
+		
+		JSONObject js = null;
+		try {
+			js = new JSONObject(json);
+		}catch(Exception e) {
+			e.printStackTrace();
+			fail("Excp occurred");
+		}
+		
+		// Is a json so parse it
+		GrafterizerParser parser = new GrafterizerParser();
+		ArrayList<Pipeline>  pipelineParsed = null;
+		try {
+			pipelineParsed = parser.parsePipelineJson(js);
+		}catch(Exception e) {
+			e.printStackTrace();
+			fail("Excp during parser occurred");
+		}
+		
+		// create simple Dataframe
+		 SparkSession sparkSession = SparkSession.builder()
+	                .appName("jsonSparker")
+	                .master("local")
+	                .getOrCreate();
+
+
+        SQLContext sqlContext = sparkSession.sqlContext();
+        Dataset<Row> dataset = sqlContext.read()
+                .option("header", true)
+                .csv("example-data.csv"); //comment option if you dont want an header
+        //dataset.show();
+        
+        
+      
+        Dataset<Row> result = PipelineExecutor.getShared().executePipeline(pipelineParsed, dataset);
+        result.show();
+	}
 
 	@Test
 	public void testParseAndExecuteDropRows() {
@@ -32,6 +152,65 @@ public class PipelineTest {
 				"    \"displayName\": \"drop-rows\",\n" + 
 				"    \"docstring\": \"Drop 2 first row(s)\",\n" + 
 				"    \"take\": false,\n" + 
+				"    \"__type\": \"DropRowsFunction\",\n" + 
+				"    \"$$hashKey\": \"object:246\"\n" + 
+				"    } " + 
+				"]\n" + 
+				"    }]}";
+		
+		
+		JSONObject js = null;
+		try {
+			js = new JSONObject(json);
+		}catch(Exception e) {
+			e.printStackTrace();
+			fail("Excp occurred");
+		}
+		
+		// Is a json so parse it
+		GrafterizerParser parser = new GrafterizerParser();
+		ArrayList<Pipeline>  pipelineParsed = null;
+		try {
+			pipelineParsed = parser.parsePipelineJson(js);
+		}catch(Exception e) {
+			e.printStackTrace();
+			fail("Excp during parser occurred");
+		}
+		
+		// create simple Dataframe
+		 SparkSession sparkSession = SparkSession.builder()
+	                .appName("jsonSparker")
+	                .master("local")
+	                .getOrCreate();
+
+
+        SQLContext sqlContext = sparkSession.sqlContext();
+        Dataset<Row> dataset = sqlContext.read()
+                .option("header", true)
+                .csv("example-data.csv"); //comment option if you dont want an header
+        //dataset.show();
+        
+        
+      
+        Dataset<Row> result = PipelineExecutor.getShared().executePipeline(pipelineParsed, dataset);
+        result.show();
+	}
+	
+	@Test
+	public void testParseAndExecuteTakeRows() {
+		
+		String json = "{\"pipelines\": "
+				+ "[\n" + 
+				"    {\n" + 
+				"    \"functions\": [\n" + 
+				"    {\n" + 
+				"    \"isPreviewed\": false,\n" + 
+				"    \"indexFrom\": 0,\n" + 
+				"    \"indexTo\": 1,\n" + 
+				"    \"name\": \"drop-rows\",\n" + 
+				"    \"displayName\": \"drop-rows\",\n" + 
+				"    \"docstring\": \"Drop 2 first row(s)\",\n" + 
+				"    \"take\": true,\n" + 
 				"    \"__type\": \"DropRowsFunction\",\n" + 
 				"    \"$$hashKey\": \"object:246\"\n" + 
 				"    } " + 
