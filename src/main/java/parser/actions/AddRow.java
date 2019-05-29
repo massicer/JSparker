@@ -23,6 +23,7 @@ import utility.LogManager;
 public class AddRow extends BaseAction {
 	
 	 private ArrayList<String> rowValues;
+	 
 
 	public AddRow(JSONObject js, int sequenceNumber) throws ActionException {
 		super(js, sequenceNumber, ActionType.DEFAULT);
