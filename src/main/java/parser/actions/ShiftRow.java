@@ -75,8 +75,9 @@ public class ShiftRow extends BaseAction {
     	
     	if (iTo > iFrom) {
     		Dataset<Row> filteredFirst = input.filter((FilterFunction<Row>) r -> ((r).getLong(colIndex) < iFrom));
-    		Dataset<Row> filteredEnd = input.filter((FilterFunction<Row>) r -> ((r).getLong(colIndex) > iFrom && (r).getLong(colIndex) != iTo));
-    		return filteredFirst.union(selectedRow).union(filteredEnd);
+    		Dataset<Row> filteredSec = input.filter((FilterFunction<Row>) r -> ((r).getLong(colIndex) > iFrom && (r).getLong(colIndex) <= iTo));
+    		Dataset<Row> filteredLast = input.filter((FilterFunction<Row>) r -> ((r).getLong(colIndex) > iTo));
+    		return filteredFirst.union(filteredSec).union(selectedRow).union(filteredLast);
     	}
     	
     	

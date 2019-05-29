@@ -26,8 +26,8 @@ public class PipelineTest {
 				"			\"name\": \"shift-row\",\n" + 
 				"			\"displayName\": \"shift-row\",\n" + 
 				"			\"isPreviewed\": false,\n" + 
-				"			\"indexFrom\": 1,\n" + 
-				"			\"indexTo\": 3,\n" + 
+				"			\"indexFrom\": 4,\n" + 
+				"			\"indexTo\": 0,\n" + 
 				"			\"shiftrowmode\": \"position\",\n" + 
 				"			\"__type\": \"ShiftRowFunction\",\n" + 
 				"			\"docstring\": \"Shift (move) row\"\n" + 
