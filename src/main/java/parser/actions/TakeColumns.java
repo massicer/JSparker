@@ -165,14 +165,38 @@ public class TakeColumns extends BaseAction {
 	
 	// TAKE ROWS - FIRST WAY
 	public Dataset<Row> takeRowsFirstWay(Dataset<Row> input) {
-		// TODO Auto-generated method stub
-		return null;
+
+		String[] colulmsString = input.columns();
+		
+		for( int i = 0; i < colulmsString.length; i++) {
+			
+			// Determinate if the current colum is to drop or not
+			for(SingleTakeColumn single: this.columsTarget) {
+				if(!single.value.equals(colulmsString[i])) 
+					// drop column
+					input = input.drop(input.col(single.value));
+			}
+		
+		}
+		return input;
 	}
 	
 	// TAKE OTHER ROWS - FIRST WAY
 	public Dataset<Row> takeOtherRowsFirstWay(Dataset<Row> input) {
-		// TODO Auto-generated method stub
-		return null;
+	
+		String[] colulmsString = input.columns();
+		
+		for( int i = 0; i < colulmsString.length; i++) {
+			
+			// Determinate if the current colum is to drop or not
+			for(SingleTakeColumn single: this.columsTarget) {
+				if(single.value.equals(colulmsString[i])) 
+					// drop column
+					input = input.drop(input.col(single.value));
+			}
+		
+		}
+		return input;
 	}
 	
 	// TAKE ROWS - SECOND WAY
