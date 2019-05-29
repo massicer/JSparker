@@ -16,6 +16,9 @@ public enum EnumActionField {
     SEPARATOR("separator"),
     COLS_TO_MERGE("colsToMerge"),
     NEW_COLUMN_NAME("newColName"),
+    COL_NAME("colName"),
+    ID("id"),
+    VALUE("value"),
     FAB_IS_OPEN("fabIsOpen");
 
     private String field;

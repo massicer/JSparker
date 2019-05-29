@@ -8,7 +8,6 @@ import org.apache.spark.sql.Row;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import com.esotericsoftware.minlog.Log.Logger;
 
 import static org.apache.spark.sql.functions.*;
 import parser.actions.enums.EnumActionField;
