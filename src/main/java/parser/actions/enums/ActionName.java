@@ -8,6 +8,8 @@ public class ActionName {
     public static final String ADD_COLUMNS = "add-columns";
     public static final String ADD_ROW = "add-row";
     public static final String RENAME_COLUMNS = "rename-columns";
+    public static final String MERGE_COLUMNS = "merge-columns";
+    public static final String SPLIT = "split";
 
 
 }
