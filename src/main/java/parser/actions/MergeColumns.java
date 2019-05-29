@@ -2,12 +2,17 @@ package parser.actions;
 
 import java.util.ArrayList;
 
+import org.apache.spark.sql.Column;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
 import org.json.JSONArray;
 import org.json.JSONObject;
+
+import com.esotericsoftware.minlog.Log.Logger;
+
 import static org.apache.spark.sql.functions.*;
 import parser.actions.enums.EnumActionField;
+import utility.LogManager;
 
 /*
   {
@@ -108,22 +113,103 @@ public class MergeColumns extends BaseAction{
 		// 0. if cols are <= 1 do nothing
 		if( this.colsToMerge.size() <= 1) return input;
 		
+
 		// 1. two cols
 		if (this.colsToMerge.size() == 2) {
+			
+			// MErge
 			input = input.withColumn(this.newColName, 
 					concat(
 							input.col(this.colsToMerge.get(0).value),
 							lit(this.separator), 
 							input.col(this.colsToMerge.get(1).value))
 					);
+			
+			// Remove merged columns
+			input = input.drop(input.col(this.colsToMerge.get(0).value)) ;
+			input = input.drop(input.col(this.colsToMerge.get(1).value)) ;
+			
 			return input;
 		}
 		
+		/*
 		// 2. More than two cols
 		String colsTempToMergeAndRemove = null;
-		for(int i = 0; i< this.colsToMerge.size(); i++) {
-			// TODO DO
+		String lastColumnNameToMergeAndDrop = null;
+		
+		for(int i = 0; i< this.colsToMerge.size() - 1; i++) {
+			
+			if ( i < this.colsToMerge.size() - 2) {
+				lastColumnNameToMergeAndDrop = "tmp"+i
+				// MErge
+				input = input.withColumn(this.newColName, 
+						concat(
+								input.col(this.colsToMerge.get(i).value),
+								lit(this.separator), 
+								input.col(this.colsToMerge.get(i+1).value))
+						);
+				
+				// Remove merged columns
+				input = input.drop(input.col(this.colsToMerge.get(i).value)) ;
+				input = input.drop(input.col(this.colsToMerge.get(i+1).value)) ;
+			}
+		
 		}// end for
-		return null;
+		
+		input = input.withColumn(this.newColName, concat(c));
+		
+		return input;
+		*/
+		
+		String lastColumnNameAdded = null;
+		for(int i = 0; i< this.colsToMerge.size() ; i++) {
+			
+			if ( i == 0) continue;
+			
+			if ( i == 1) {
+				lastColumnNameAdded = "tmp"+i;
+				input = mergeTwoColumnsAndDeleteThem(
+						input,
+						this.colsToMerge.get(i).value,
+						this.colsToMerge.get(i-1).value,
+						lastColumnNameAdded);
+				
+			}else if ( i < this.colsToMerge.size() - 2) {
+				String newColNameTMP = "tmp"+i;
+				input = mergeTwoColumnsAndDeleteThem(
+						input,
+						this.colsToMerge.get(i).value,
+						lastColumnNameAdded,
+						newColNameTMP);
+				lastColumnNameAdded = newColNameTMP;
+				
+			}else {
+				input = mergeTwoColumnsAndDeleteThem(input,this.colsToMerge.get(i).value, lastColumnNameAdded,this.newColName );
+			}
+			
+		}
+		return input;
+		
+		
 	}
+	
+	public Dataset<Row> mergeTwoColumnsAndDeleteThem(Dataset<Row> input, String colSource1, String colSource2, String newColName) {
+	
+		
+		// MErge
+		input = input.withColumn(newColName, 
+				concat(
+						input.col(colSource1),
+						lit(this.separator), 
+						input.col(colSource2)
+				));
+		
+		// Remove merged columns
+		input = input.drop(input.col(colSource1)) ;
+		input = input.drop(input.col(colSource2)) ;
+		return input;
+		
+	}
+
+	
 }

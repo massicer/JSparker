@@ -272,7 +272,10 @@ public class PipelineTest {
 		}
 	}
 
-	public void testParseAndExecuteMergeColumns() {
+	@Test
+	public void testParseAndExecuteMerge2Columns() {
+		
+		try {
 	
 		String json = "{\n" + 
 				"	\"pipelines\": [{\n" + 
@@ -281,14 +284,14 @@ public class PipelineTest {
 				"	\"newColName\": \"nuovoNome\",\n" + 
 				"	\"colsToMerge\": [{\n" + 
 				"		\"id\": 0,\n" + 
-				"		\"value\": \"a\"\n" + 
+				"		\"value\": \"name\"\n" + 
 				"	}, {\n" + 
 				"		\"id\": 1,\n" + 
-				"		\"value\": \"b\"\n" + 
+				"		\"value\": \"sex\"\n" + 
 				"	}],\n" + 
 				"	\"name\": \"merge-columns\",\n" + 
 				"	\"displayName\": \"merge-columns\",\n" + 
-				"	\"separator\": \"separatore\",\n" + 
+				"	\"separator\": \"-\",\n" + 
 				"	\"__type\": \"MergeColumnsFunction\",\n" + 
 				"	\"docstring\": \"Merge columns\"\n" + 
 				"}],\n" + 
@@ -327,5 +330,80 @@ public class PipelineTest {
 	                .csv("example-data.csv"); //comment option if you dont want an header
         Dataset<Row> result = PipelineExecutor.getShared().executePipeline(pipelineParsed, dataset);
 	    result.show();
+	    
+		}catch(Exception e) {
+			e.printStackTrace();
+			fail(e.getMessage());
+		}
+	}
+	
+	@Test
+	public void testParseAndExecuteMerge3Columns() {
+		
+		try {
+	
+		String json = "{\n" + 
+				"	\"pipelines\": [{\n" + 
+				"		\"functions\": [{\n" + 
+				"	\"isPreviewed\": false,\n" + 
+				"	\"newColName\": \"nuovoNome\",\n" + 
+				"	\"colsToMerge\": [{\n" + 
+				"		\"id\": 0,\n" + 
+				"		\"value\": \"name\"\n" + 
+				"	}, {\n" + 
+				"		\"id\": 1,\n" + 
+				"		\"value\": \"sex\"\n" + 
+				"	},"+
+				 "{\n" + 
+					"		\"id\": 1,\n" + 
+					"		\"value\": \"age\"\n" + 
+					"	}"
+				+ "],\n" + 
+				"	\"name\": \"merge-columns\",\n" + 
+				"	\"displayName\": \"merge-columns\",\n" + 
+				"	\"separator\": \"-\",\n" + 
+				"	\"__type\": \"MergeColumnsFunction\",\n" + 
+				"	\"docstring\": \"Merge columns\"\n" + 
+				"}],\n" + 
+				"		\"__type\": \"Pipeline\"\n" + 
+				"	}]\n" + 
+				"}";
+		
+		JSONObject js = null;
+		try {
+			js = new JSONObject(json);
+		}catch(Exception e) {
+			e.printStackTrace();
+			fail("Excp occurred");
+		}
+		
+		// Is a json so parse it
+		GrafterizerParser parser = new GrafterizerParser();
+		ArrayList<Pipeline>  pipelineParsed = null;
+		try {
+			pipelineParsed = parser.parsePipelineJson(js);
+		}catch(Exception e) {
+			e.printStackTrace();
+			fail("Excp during parser occurred");
+		}
+		
+		// create simple Dataframe
+		 SparkSession sparkSession = SparkSession.builder()
+	                .appName("jsonSparker")
+	                .master("local")
+	                .getOrCreate();
+
+
+	        SQLContext sqlContext = sparkSession.sqlContext();
+	        Dataset<Row> dataset = sqlContext.read()
+	                .option("header", true)
+	                .csv("example-data.csv"); //comment option if you dont want an header
+        Dataset<Row> result = PipelineExecutor.getShared().executePipeline(pipelineParsed, dataset);
+	    result.show();
+	    
+		}catch(Exception e) {
+			e.printStackTrace();
+			fail(e.getMessage());
+		}
 	}
 }
