@@ -10,6 +10,7 @@ import parser.actions.DropRows;
 import parser.actions.FilterRows;
 import parser.actions.RenameColumns;
 import parser.actions.ShiftRow;
+import parser.actions.SortDataset;
 import parser.actions.MergeColumns;
 import parser.actions.SplitAction;
 import parser.actions.enums.ActionName;
@@ -154,6 +155,10 @@ public class GrafterizerParser {
             	LogManager.getShared().logInfo("GrafterizerParser - parseAction() - shift row action detected");
             	return new FilterRows(actJs, progressNumber);
 
+            case ActionName.SORT_DATASET:
+            	LogManager.getShared().logInfo("GrafterizerParser - parseAction() - shift row action detected");
+            	return new SortDataset(actJs, progressNumber);
+            	
             
             case ActionName.RENAME_COLUMNS:
             	LogManager.getShared().logInfo("GrafterizerParser - parseAction() - rename columns action detected");
