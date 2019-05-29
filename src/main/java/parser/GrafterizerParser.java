@@ -8,6 +8,7 @@ import parser.actions.AddRow;
 import parser.actions.BaseAction;
 import parser.actions.DropRows;
 import parser.actions.FilterRows;
+import parser.actions.GroupAndAggregate;
 import parser.actions.RenameColumns;
 import parser.actions.ShiftRow;
 import parser.actions.SortDataset;
@@ -158,6 +159,10 @@ public class GrafterizerParser {
             case ActionName.SORT_DATASET:
             	LogManager.getShared().logInfo("GrafterizerParser - parseAction() - shift row action detected");
             	return new SortDataset(actJs, progressNumber);
+            	
+            case ActionName.GROUP_AGGREGATE:
+            	LogManager.getShared().logInfo("GrafterizerParser - parseAction() - shift row action detected");
+            	return new GroupAndAggregate(actJs, progressNumber);
             	
             
             case ActionName.RENAME_COLUMNS:

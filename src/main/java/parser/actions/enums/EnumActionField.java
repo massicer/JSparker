@@ -21,13 +21,15 @@ public enum EnumActionField {
     COLS_TO_MERGE("colsToMerge"),
     NEW_COLUMN_NAME("newColName"),
     COL_NAME("colName"),
+    COL_NAMES("colnames"),
     COL_SORT_NAME("colname"),
     SORT_TYPE("sorttype"),
     ORDER("order"),
     COLSORTMAP("colnamesSorttypesMap"),
     ID("id"),
     VALUE("value"),
-    FAB_IS_OPEN("fabIsOpen");
+    FAB_IS_OPEN("fabIsOpen"),
+    COL_NAMES_FUNCTION_SET("colnamesFunctionsSet");
 
     private String field;
 

@@ -11,5 +11,6 @@ public class ActionName {
     public static final String MERGE_COLUMNS = "merge-columns";
     public static final String SPLIT = "split";
     public static final String SORT_DATASET = "sort-dataset";
+    public static final String GROUP_AGGREGATE = "group-rows";
 
 }
