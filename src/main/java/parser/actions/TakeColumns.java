@@ -119,7 +119,8 @@ public class TakeColumns extends BaseAction {
 					
 				// 0.B Check If is second way
 			} else if ((!js.isNull(EnumActionField.INDEX_FROM.getVal()) && !js.isNull(EnumActionField.INDEX_TO.getVal())) &&
-					js.isNull(EnumActionField.COLUMNS_ARRAY.getVal())) {
+					( js.isNull(EnumActionField.COLUMNS_ARRAY.getVal() ) || 
+							(js.getJSONArray(EnumActionField.COLUMNS_ARRAY.getVal()).length()) == 0)) {
 				
 				// 2.A assign mode
 				workingMode = Mode.SECOND;
@@ -128,6 +129,9 @@ public class TakeColumns extends BaseAction {
 				this.indexFrom = js.getInt(EnumActionField.INDEX_FROM.getVal());
 				this.indexTo = js.getInt(EnumActionField.INDEX_TO.getVal());
 				
+				// 2.C check index validation
+				if( indexFrom < 0 || indexFrom > indexTo )
+					throw new ActionException("TakeColumns - index validation error");
 		
 			}else {
 				// 0.C no way detected
@@ -171,11 +175,15 @@ public class TakeColumns extends BaseAction {
 		for( int i = 0; i < colulmsString.length; i++) {
 			
 			// Determinate if the current colum is to drop or not
+			boolean drop = false;
 			for(SingleTakeColumn single: this.columsTarget) {
 				if(!single.value.equals(colulmsString[i])) 
-					// drop column
-					input = input.drop(input.col(single.value));
+					drop = true;
+					
 			}
+			
+			if(drop) // drop column
+				input = input.drop(input.col(colulmsString[i]));
 		
 		}
 		return input;
@@ -189,26 +197,48 @@ public class TakeColumns extends BaseAction {
 		for( int i = 0; i < colulmsString.length; i++) {
 			
 			// Determinate if the current colum is to drop or not
+			boolean drop = false;
 			for(SingleTakeColumn single: this.columsTarget) {
 				if(single.value.equals(colulmsString[i])) 
-					// drop column
-					input = input.drop(input.col(single.value));
+					drop = true;
+					
 			}
+			
+			if(drop) // drop column
+				input = input.drop(input.col(colulmsString[i]));
 		
 		}
 		return input;
 	}
 	
-	// TAKE ROWS - SECOND WAY
+	// TAKE ROWS - SECOND WAY (By index range)
 	public Dataset<Row> takeRowsSecondWay(Dataset<Row> input) {
-		// TODO Auto-generated method stub
-		return null;
+		
+		String[] colulmsString = input.columns();
+		
+		for( int i = 0; i < colulmsString.length; i++) {
+			
+			if ( !(i >= this.indexFrom && i <= this.indexTo))
+				// drop column
+				input = input.drop(input.col(colulmsString[i]));
+		
+		}
+		return input;
 	}
 	
-	// TAKE OTHER ROWS - SECOND WAY
+	// TAKE OTHER ROWS - SECOND WAY (By Index range)
 	public Dataset<Row> takeOtherRowsSecondWay(Dataset<Row> input) {
-		// TODO Auto-generated method stub
-		return null;
+		
+	String[] colulmsString = input.columns();
+		
+		for( int i = 0; i < colulmsString.length; i++) {
+			
+			if (i >= this.indexFrom && i <= this.indexTo)
+				// drop column
+				input = input.drop(input.col(colulmsString[i]));
+		
+		}
+		return input;
 	}
 
 }
