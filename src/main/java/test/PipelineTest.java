@@ -77,7 +77,7 @@ public class PipelineTest {
         SQLContext sqlContext = sparkSession.sqlContext();
         Dataset<Row> dataset = sqlContext.read()
                 .option("header", true)
-                .csv("example-data.csv"); //comment option if you dont want an header
+                .csv("example-data.csv"); //comment option if you don t want an header
         dataset.show();
         
         
