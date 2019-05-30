@@ -32,6 +32,11 @@ public enum EnumActionField {
     VALUE("value"),
     FAB_IS_OPEN("fabIsOpen"),
     COL_NAMES_FUNCTION_SET("colnamesFunctionsSet");
+    COL_FROM("colFrom"),
+    ID("id"),
+    VALUE("value"),
+    SHIFT_COL_MODE("shiftcolmode"),
+    FAB_IS_OPEN("fabIsOpen");
 
     private String field;
 

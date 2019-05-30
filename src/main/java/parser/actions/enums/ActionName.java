@@ -13,5 +13,8 @@ public class ActionName {
     public static final String SORT_DATASET = "sort-dataset";
     public static final String GROUP_AGGREGATE = "group-rows";
     public static final String DEDUPLICATE = "remove-duplicates";
+    public static final String TAKE_COLUMNS = "columns";
+    public static final String SHIFT_COLUMN = "shift-column";
+
 
 }
