@@ -25,5 +25,7 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
+	<classpathentry kind="lib" path="/Users/davideceresola/Downloads/clojure/clojure.jar"/>
+	<classpathentry kind="lib" path="/Users/davideceresola/Downloads/clojure/spec.alpha-0.2.176.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>
