@@ -21,8 +21,10 @@ public enum EnumActionField {
     COLS_TO_MERGE("colsToMerge"),
     NEW_COLUMN_NAME("newColName"),
     COL_NAME("colName"),
+    COL_FROM("colFrom"),
     ID("id"),
     VALUE("value"),
+    SHIFT_COL_MODE("shiftcolmode"),
     FAB_IS_OPEN("fabIsOpen");
 
     private String field;

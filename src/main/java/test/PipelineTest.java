@@ -650,5 +650,388 @@ public class PipelineTest {
 				fail(e.getMessage());
 			}
 	}
+	
+	@Test
+	public void testTakeColumWithNameAndTakeMode() {
+		
+		try {
+	
+		String json = "{\n" + 
+				"	\"pipelines\": [{\n" + 
+				"		\"functions\": ["+
+				" {\n" + 
+				"		\"name\": \"columns\",\n" + 
+				"		\"displayName\": \"columns\",\n" + 
+				"		\"isPreviewed\": false,\n" + 
+				"		\"columnsArray\": [{\n" + 
+				"			\"id\": 0,\n" + 
+				"			\"value\": \"sex\"\n" + 
+				"		}],\n" + 
+				"		\"indexFrom\": null,\n" + 
+				"		\"indexTo\": null,\n" + 
+				"		\"take\": true,\n" + 
+				"		\"__type\": \"ColumnsFunction\",\n" + 
+				"		\"docstring\": \"Take columns\"\n" + 
+				"	}"
+				+ "],\n" + 
+				"		\"__type\": \"Pipeline\"\n" + 
+				"	}]\n" + 
+				"}";
+		
+		JSONObject js = null;
+		try {
+			js = new JSONObject(json);
+		}catch(Exception e) {
+			e.printStackTrace();
+			fail("Excp occurred");
+		}
+		
+		// Is a json so parse it
+		GrafterizerParser parser = new GrafterizerParser();
+		ArrayList<Pipeline>  pipelineParsed = null;
+		try {
+			pipelineParsed = parser.parsePipelineJson(js);
+		}catch(Exception e) {
+			e.printStackTrace();
+			fail("Excp during parser occurred");
+		}
+		
+		// create simple Dataframe
+		 SparkSession sparkSession = SparkSession.builder()
+	                .appName("jsonSparker")
+	                .master("local")
+	                .getOrCreate();
 
+
+	        SQLContext sqlContext = sparkSession.sqlContext();
+	        Dataset<Row> dataset = sqlContext.read()
+	                .option("header", true)
+	                .csv("example-data.csv"); //comment option if you dont want an header
+        Dataset<Row> result = PipelineExecutor.getShared().executePipeline(pipelineParsed, dataset);
+	    result.show();
+	    
+		}catch(Exception e) {
+			e.printStackTrace();
+			fail(e.getMessage());
+		}
+	}
+
+	@Test
+	public void testTakeColumWithNameAndNOTTakeMode() {
+		
+		try {
+	
+		String json = "{\n" + 
+				"	\"pipelines\": [{\n" + 
+				"		\"functions\": ["+
+				" {\n" + 
+				"		\"name\": \"columns\",\n" + 
+				"		\"displayName\": \"columns\",\n" + 
+				"		\"isPreviewed\": false,\n" + 
+				"		\"columnsArray\": [{\n" + 
+				"			\"id\": 0,\n" + 
+				"			\"value\": \"sex\"\n" + 
+				"		}],\n" + 
+				"		\"indexFrom\": null,\n" + 
+				"		\"indexTo\": null,\n" + 
+				"		\"take\": false,\n" + 
+				"		\"__type\": \"ColumnsFunction\",\n" + 
+				"		\"docstring\": \"Take columns\"\n" + 
+				"	}"
+				+ "],\n" + 
+				"		\"__type\": \"Pipeline\"\n" + 
+				"	}]\n" + 
+				"}";
+		
+		JSONObject js = null;
+		try {
+			js = new JSONObject(json);
+		}catch(Exception e) {
+			e.printStackTrace();
+			fail("Excp occurred");
+		}
+		
+		// Is a json so parse it
+		GrafterizerParser parser = new GrafterizerParser();
+		ArrayList<Pipeline>  pipelineParsed = null;
+		try {
+			pipelineParsed = parser.parsePipelineJson(js);
+		}catch(Exception e) {
+			e.printStackTrace();
+			fail("Excp during parser occurred");
+		}
+		
+		// create simple Dataframe
+		 SparkSession sparkSession = SparkSession.builder()
+	                .appName("jsonSparker")
+	                .master("local")
+	                .getOrCreate();
+
+
+	        SQLContext sqlContext = sparkSession.sqlContext();
+	        Dataset<Row> dataset = sqlContext.read()
+	                .option("header", true)
+	                .csv("example-data.csv"); //comment option if you dont want an header
+        Dataset<Row> result = PipelineExecutor.getShared().executePipeline(pipelineParsed, dataset);
+	    result.show();
+	    
+		}catch(Exception e) {
+			e.printStackTrace();
+			fail(e.getMessage());
+		}
+	}
+	
+	@Test
+	public void testTakeColumWithIndexesAndNOTTakeMode() {
+		
+		try {
+	
+		String json = "{\n" + 
+				"	\"pipelines\": [{\n" + 
+				"		\"functions\": ["+
+				" {\n" + 
+				"		\"name\": \"columns\",\n" + 
+				"		\"displayName\": \"columns\",\n" + 
+				"		\"isPreviewed\": false,\n" + 
+				"		\"columnsArray\": [],\n" + 
+				"		\"indexFrom\": 1,\n" + 
+				"		\"indexTo\": 2,\n" + 
+				"		\"take\": false,\n" + 
+				"		\"__type\": \"ColumnsFunction\",\n" + 
+				"		\"docstring\": \"Take columns\"\n" + 
+				"	}"
+				+ "],\n" + 
+				"		\"__type\": \"Pipeline\"\n" + 
+				"	}]\n" + 
+				"}";
+		
+		JSONObject js = null;
+		try {
+			js = new JSONObject(json);
+		}catch(Exception e) {
+			e.printStackTrace();
+			fail("Excp occurred");
+		}
+		
+		// Is a json so parse it
+		GrafterizerParser parser = new GrafterizerParser();
+		ArrayList<Pipeline>  pipelineParsed = null;
+		try {
+			pipelineParsed = parser.parsePipelineJson(js);
+		}catch(Exception e) {
+			e.printStackTrace();
+			fail("Excp during parser occurred");
+		}
+		
+		// create simple Dataframe
+		 SparkSession sparkSession = SparkSession.builder()
+	                .appName("jsonSparker")
+	                .master("local")
+	                .getOrCreate();
+
+
+	        SQLContext sqlContext = sparkSession.sqlContext();
+	        Dataset<Row> dataset = sqlContext.read()
+	                .option("header", true)
+	                .csv("example-data.csv"); //comment option if you dont want an header
+        Dataset<Row> result = PipelineExecutor.getShared().executePipeline(pipelineParsed, dataset);
+	    result.show();
+	    
+		}catch(Exception e) {
+			e.printStackTrace();
+			fail(e.getMessage());
+		}
+	}
+	
+	@Test
+	public void testTakeColumWithIndexesAndTakeMode() {
+		
+		try {
+	
+		String json = "{\n" + 
+				"	\"pipelines\": [{\n" + 
+				"		\"functions\": ["+
+				" {\n" + 
+				"		\"name\": \"columns\",\n" + 
+				"		\"displayName\": \"columns\",\n" + 
+				"		\"isPreviewed\": false,\n" + 
+				"		\"columnsArray\": [],\n" + 
+				"		\"indexFrom\": 1,\n" + 
+				"		\"indexTo\": 2,\n" + 
+				"		\"take\": true,\n" + 
+				"		\"__type\": \"ColumnsFunction\",\n" + 
+				"		\"docstring\": \"Take columns\"\n" + 
+				"	}"
+				+ "],\n" + 
+				"		\"__type\": \"Pipeline\"\n" + 
+				"	}]\n" + 
+				"}";
+		
+		JSONObject js = null;
+		try {
+			js = new JSONObject(json);
+		}catch(Exception e) {
+			e.printStackTrace();
+			fail("Excp occurred");
+		}
+		
+		// Is a json so parse it
+		GrafterizerParser parser = new GrafterizerParser();
+		ArrayList<Pipeline>  pipelineParsed = null;
+		try {
+			pipelineParsed = parser.parsePipelineJson(js);
+		}catch(Exception e) {
+			e.printStackTrace();
+			fail("Excp during parser occurred");
+		}
+		
+		// create simple Dataframe
+		 SparkSession sparkSession = SparkSession.builder()
+	                .appName("jsonSparker")
+	                .master("local")
+	                .getOrCreate();
+
+
+	        SQLContext sqlContext = sparkSession.sqlContext();
+	        Dataset<Row> dataset = sqlContext.read()
+	                .option("header", true)
+	                .csv("example-data.csv"); //comment option if you dont want an header
+        Dataset<Row> result = PipelineExecutor.getShared().executePipeline(pipelineParsed, dataset);
+	    result.show();
+	    
+		}catch(Exception e) {
+			e.printStackTrace();
+			fail(e.getMessage());
+		}
+	}
+	
+	@Test
+	public void testShiftColumnToEOF() {
+		
+		try {
+	
+		String json = "{\n" + 
+				"	\"pipelines\": [{\n" + 
+				"		\"functions\": ["+
+				" {\n" + 
+				"		\"name\": \"shift-column\",\n" + 
+				"		\"displayName\": \"shift-column\",\n" + 
+				"		\"isPreviewed\": false,\n" + 
+				"		\"colFrom\": {\n" + 
+				"			\"id\": 0,\n" + 
+				"			\"value\": \"sex\"\n" + 
+				"		},\n" + 
+				"		\"indexTo\": null,\n" + 
+				"		\"shiftcolmode\": \"eods\",\n" + 
+				"		\"__type\": \"ShiftColumnFunction\",\n" + 
+				"		\"docstring\": \"Shift (move) column\"\n" + 
+				"	}"
+				+ "],\n" + 
+				"		\"__type\": \"Pipeline\"\n" + 
+				"	}]\n" + 
+				"}";
+		
+		JSONObject js = null;
+		try {
+			js = new JSONObject(json);
+		}catch(Exception e) {
+			e.printStackTrace();
+			fail("Excp occurred");
+		}
+		
+		// Is a json so parse it
+		GrafterizerParser parser = new GrafterizerParser();
+		ArrayList<Pipeline>  pipelineParsed = null;
+		try {
+			pipelineParsed = parser.parsePipelineJson(js);
+		}catch(Exception e) {
+			e.printStackTrace();
+			fail("Excp during parser occurred");
+		}
+		
+		// create simple Dataframe
+		 SparkSession sparkSession = SparkSession.builder()
+	                .appName("jsonSparker")
+	                .master("local")
+	                .getOrCreate();
+
+
+	        SQLContext sqlContext = sparkSession.sqlContext();
+	        Dataset<Row> dataset = sqlContext.read()
+	                .option("header", true)
+	                .csv("example-data.csv"); //comment option if you dont want an header
+        Dataset<Row> result = PipelineExecutor.getShared().executePipeline(pipelineParsed, dataset);
+	    result.show();
+	    
+		}catch(Exception e) {
+			e.printStackTrace();
+			fail(e.getMessage());
+		}
+	}
+	
+	@Test
+	public void testShiftColumnTOGivenPosition() {
+		
+		try {
+	
+		String json = "{\n" + 
+				"	\"pipelines\": [{\n" + 
+				"		\"functions\": ["+
+				" {\n" + 
+				"		\"name\": \"shift-column\",\n" + 
+				"		\"displayName\": \"shift-column\",\n" + 
+				"		\"isPreviewed\": false,\n" + 
+				"		\"colFrom\": {\n" + 
+				"			\"id\": 0,\n" + 
+				"			\"value\": \"sex\"\n" + 
+				"		},\n" + 
+				"		\"indexTo\": 4,\n" + 
+				"		\"shiftcolmode\": \"position\",\n" + 
+				"		\"__type\": \"ShiftColumnFunction\",\n" + 
+				"		\"docstring\": \"Shift (move) column\"\n" + 
+				"	}"
+				+ "],\n" + 
+				"		\"__type\": \"Pipeline\"\n" + 
+				"	}]\n" + 
+				"}";
+		
+		JSONObject js = null;
+		try {
+			js = new JSONObject(json);
+		}catch(Exception e) {
+			e.printStackTrace();
+			fail("Excp occurred");
+		}
+		
+		// Is a json so parse it
+		GrafterizerParser parser = new GrafterizerParser();
+		ArrayList<Pipeline>  pipelineParsed = null;
+		try {
+			pipelineParsed = parser.parsePipelineJson(js);
+		}catch(Exception e) {
+			e.printStackTrace();
+			fail("Excp during parser occurred");
+		}
+		
+		// create simple Dataframe
+		 SparkSession sparkSession = SparkSession.builder()
+	                .appName("jsonSparker")
+	                .master("local")
+	                .getOrCreate();
+
+
+	        SQLContext sqlContext = sparkSession.sqlContext();
+	        Dataset<Row> dataset = sqlContext.read()
+	                .option("header", true)
+	                .csv("example-data.csv"); //comment option if you dont want an header
+        Dataset<Row> result = PipelineExecutor.getShared().executePipeline(pipelineParsed, dataset);
+	    result.show();
+	    
+		}catch(Exception e) {
+			e.printStackTrace();
+			fail(e.getMessage());
+		}
+	}
+	
+	
 }// end test suite
