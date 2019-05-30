@@ -12,5 +12,6 @@ public class ActionName {
     public static final String SPLIT = "split";
     public static final String SORT_DATASET = "sort-dataset";
     public static final String GROUP_AGGREGATE = "group-rows";
+    public static final String DEDUPLICATE = "remove-duplicates";
 
 }

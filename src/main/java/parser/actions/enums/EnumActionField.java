@@ -23,6 +23,8 @@ public enum EnumActionField {
     COL_NAME("colName"),
     COL_NAMES("colnames"),
     COL_SORT_NAME("colname"),
+    COL_DEDUPLICATE_NAME("colNames"),
+    MODE("mode"),
     SORT_TYPE("sorttype"),
     ORDER("order"),
     COLSORTMAP("colnamesSorttypesMap"),
