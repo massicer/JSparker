@@ -73,7 +73,6 @@ public class SplitAction extends BaseAction {
 		 * At the moment is assumed the splits are max 2
 		/*
 		 * */
-	
 		input = input.withColumn(this.colToSplitName+"1", splitted.getItem(0));
 		input = input.withColumn(this.colToSplitName+"2", splitted.getItem(1));
 	

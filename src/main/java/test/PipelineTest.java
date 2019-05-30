@@ -18,6 +18,234 @@ import pipenineExecutor.PipelineExecutor;
 public class PipelineTest {
 	
 	@Test
+	public void testDeduplicate() {
+		
+		String json = "{\n" + 
+				"	\"pipelines\": [{\n" + 
+				"		\"functions\": [{\n" + 
+				"			\"name\": \"remove-duplicates\",\n" + 
+				"			\"displayName\": \"remove-duplicates\",\n" + 
+				"			\"isPreviewed\": false,\n" + 
+				"			\"mode\": \"full\",\n" + 
+				"			\"colNames\": [],\n" + 
+				"			\"separator\": null,\n" + 
+				"			\"__type\": \"RemoveDuplicatesFunction\",\n" + 
+				"			\"docstring\": \"Remove duplicates\"\n" + 
+				"		}, {\n" + 
+				"			\"name\": \"remove-duplicates\",\n" + 
+				"			\"displayName\": \"remove-duplicates\",\n" + 
+				"			\"isPreviewed\": false,\n" + 
+				"			\"mode\": \"colnames\",\n" + 
+				"			\"colNames\": [{\n" + 
+				"				\"id\": 1,\n" + 
+				"				\"value\": \"sex\"\n" + 
+				"			}],\n" + 
+				"			\"separator\": null,\n" + 
+				"			\"__type\": \"RemoveDuplicatesFunction\",\n" + 
+				"			\"docstring\": \"Remove duplicates\"\n" + 
+				"		}],\n" + 
+				"		\"__type\": \"Pipeline\"\n" + 
+				"	}]\n" + 
+				"}";
+		
+		
+		JSONObject js = null;
+		try {
+			js = new JSONObject(json);
+		}catch(Exception e) {
+			e.printStackTrace();
+			fail("Excp occurred");
+		}
+		
+		// Is a json so parse it
+		GrafterizerParser parser = new GrafterizerParser();
+		ArrayList<Pipeline>  pipelineParsed = null;
+		try {
+			pipelineParsed = parser.parsePipelineJson(js);
+		}catch(Exception e) {
+			e.printStackTrace();
+			fail("Excp during parser occurred");
+		}
+		
+		// create simple Dataframe
+		 SparkSession sparkSession = SparkSession.builder()
+	                .appName("jsonSparker")
+	                .master("local")
+	                .getOrCreate();
+
+
+        SQLContext sqlContext = sparkSession.sqlContext();
+        Dataset<Row> dataset = sqlContext.read()
+                .option("header", true)
+                .csv("example-data.csv"); //comment option if you don t want an header
+        dataset.show();
+        
+        
+      
+        Dataset<Row> result = PipelineExecutor.getShared().executePipeline(pipelineParsed, dataset);
+        result.show();
+	}
+	
+	@Test
+	public void testGroupAndAggregate() {
+		
+		String json = "{\n" + 
+				"	\"pipelines\": [{\n" + 
+				"		\"functions\": [{\n" + 
+				"			\"isPreviewed\": false,\n" + 
+				"			\"name\": \"group-rows\",\n" + 
+				"			\"displayName\": \"group-rows\",\n" + 
+				"			\"colnames\": [{\n" + 
+				"				\"id\": 0,\n" + 
+				"				\"value\": \"name\"\n" + 
+				"			}, {\n" + 
+				"				\"id\": 1,\n" + 
+				"				\"value\": \"sex\"\n" + 
+				"			}],\n" + 
+				"			\"colnamesFunctionsSet\": [{\n" + 
+				"				\"id\": 2,\n" + 
+				"				\"value\": \"age\"\n" + 
+				"			}, \"COUNT\"],\n" + 
+				"			\"separatorSet\": [null],\n" + 
+				"			\"__type\": \"GroupRowsFunction\",\n" + 
+				"			\"docstring\": \"Group and aggregate\"\n" + 
+				"		}],\n" + 
+				"		\"__type\": \"Pipeline\"\n" + 
+				"	}]\n" + 
+				"}";
+		
+		
+		JSONObject js = null;
+		try {
+			js = new JSONObject(json);
+		}catch(Exception e) {
+			e.printStackTrace();
+			fail("Excp occurred");
+		}
+		
+		// Is a json so parse it
+		GrafterizerParser parser = new GrafterizerParser();
+		ArrayList<Pipeline>  pipelineParsed = null;
+		try {
+			pipelineParsed = parser.parsePipelineJson(js);
+		}catch(Exception e) {
+			e.printStackTrace();
+			fail("Excp during parser occurred");
+		}
+		
+		// create simple Dataframe
+		 SparkSession sparkSession = SparkSession.builder()
+	                .appName("jsonSparker")
+	                .master("local")
+	                .getOrCreate();
+
+
+        SQLContext sqlContext = sparkSession.sqlContext();
+        Dataset<Row> dataset = sqlContext.read()
+                .option("header", true)
+                .csv("example-data.csv"); //comment option if you dont want an header
+        //dataset.show();
+        
+        
+      
+        Dataset<Row> result = PipelineExecutor.getShared().executePipeline(pipelineParsed, dataset);
+        result.show();
+	}
+	
+	@Test
+	public void testSortDataset() {
+		/*
+		String json = "{\n" + 
+				"	\"pipelines\": [{\n" + 
+				"		\"functions\": [{\n" + 
+				"			\"name\": \"sort-dataset\",\n" + 
+				"			\"displayName\": \"sort-dataset\",\n" + 
+				"			\"isPreviewed\": false,\n" + 
+				"			\"colnamesSorttypesMap\": [{\n" + 
+				"				\"colname\": {\n" + 
+				"					\"id\": 0,\n" + 
+				"					\"value\": \"name\"\n" + 
+				"				},\n" + 
+				"				\"sorttype\": \"Alphabetical\",\n" + 
+				"				\"order\": false,\n" + 
+				"				\"__type\": \"ColnameSorttype\"\n" + 
+				"			}, {\n" + 
+				"				\"colname\": {\n" + 
+				"					\"id\": 0,\n" + 
+				"					\"value\": \"age\"\n" + 
+				"				},\n" + 
+				"				\"sorttype\": \"Numerical\",\n" + 
+				"				\"order\": false,\n" + 
+				"				\"__type\": \"ColnameSorttype\"\n" + 
+				"			}],\n" + 
+				"			\"__type\": \"SortDatasetFunction\",\n" + 
+				"			\"docstring\": \"Sort column\"\n" + 
+				"		}],\n" + 
+				"		\"__type\": \"Pipeline\"\n" + 
+				"	}]\n" + 
+				"}";
+		*/
+		String json = "{\n" + 
+				"	\"pipelines\": [{\n" + 
+				"		\"functions\": [{\n" + 
+				"			\"name\": \"sort-dataset\",\n" + 
+				"			\"displayName\": \"sort-dataset\",\n" + 
+				"			\"isPreviewed\": false,\n" + 
+				"			\"colnamesSorttypesMap\": [{\n" + 
+				"				\"colname\": {\n" + 
+				"					\"id\": 0,\n" + 
+				"					\"value\": \"age\"\n" + 
+				"				},\n" + 
+				"				\"sorttype\": \"Numerical\",\n" + 
+				"				\"order\": false,\n" + 
+				"				\"__type\": \"ColnameSorttype\"\n" + 
+				"			}],\n" + 
+				"			\"__type\": \"SortDatasetFunction\",\n" + 
+				"			\"docstring\": \"Sort column\"\n" + 
+				"		}],\n" + 
+				"		\"__type\": \"Pipeline\"\n" + 
+				"	}]\n" + 
+				"}";
+		
+		
+		JSONObject js = null;
+		try {
+			js = new JSONObject(json);
+		}catch(Exception e) {
+			e.printStackTrace();
+			fail("Excp occurred");
+		}
+		
+		// Is a json so parse it
+		GrafterizerParser parser = new GrafterizerParser();
+		ArrayList<Pipeline>  pipelineParsed = null;
+		try {
+			pipelineParsed = parser.parsePipelineJson(js);
+		}catch(Exception e) {
+			e.printStackTrace();
+			fail("Excp during parser occurred");
+		}
+		
+		// create simple Dataframe
+		 SparkSession sparkSession = SparkSession.builder()
+	                .appName("jsonSparker")
+	                .master("local")
+	                .getOrCreate();
+
+
+        SQLContext sqlContext = sparkSession.sqlContext();
+        Dataset<Row> dataset = sqlContext.read()
+                .option("header", true)
+                .csv("example-data.csv"); //comment option if you dont want an header
+        //dataset.show();
+        
+        
+      
+        Dataset<Row> result = PipelineExecutor.getShared().executePipeline(pipelineParsed, dataset);
+        result.show();
+	}
+	
+	@Test
 	public void testFilterRows() {
 		
 		String json = "{\n" + 

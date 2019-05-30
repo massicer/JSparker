@@ -6,11 +6,14 @@ import org.json.JSONObject;
 import parser.actions.AddColumns;
 import parser.actions.AddRow;
 import parser.actions.BaseAction;
+import parser.actions.Deduplicate;
 import parser.actions.DropRows;
 import parser.actions.FilterRows;
+import parser.actions.GroupAndAggregate;
 import parser.actions.RenameColumns;
 import parser.actions.ShiftColumn;
 import parser.actions.ShiftRow;
+import parser.actions.SortDataset;
 import parser.actions.MergeColumns;
 import parser.actions.SplitAction;
 import parser.actions.TakeColumns;
@@ -153,9 +156,21 @@ public class GrafterizerParser {
             	return new ShiftRow(actJs, progressNumber);
             	
             case ActionName.FILTER_ROWS:
-            	LogManager.getShared().logInfo("GrafterizerParser - parseAction() - shift row action detected");
+            	LogManager.getShared().logInfo("GrafterizerParser - parseAction() - FILTER_ROWS row action detected");
             	return new FilterRows(actJs, progressNumber);
 
+            case ActionName.SORT_DATASET:
+            	LogManager.getShared().logInfo("GrafterizerParser - parseAction() - SORT_DATASET row action detected");
+            	return new SortDataset(actJs, progressNumber);
+            	
+            case ActionName.GROUP_AGGREGATE:
+            	LogManager.getShared().logInfo("GrafterizerParser - parseAction() - GROUP_AGGREGATE row action detected");
+            	return new GroupAndAggregate(actJs, progressNumber);
+            
+            case ActionName.DEDUPLICATE:
+            	LogManager.getShared().logInfo("GrafterizerParser - parseAction() - DEDUPLICATE action detected");
+            	return new Deduplicate(actJs, progressNumber);
+            	
             
             case ActionName.RENAME_COLUMNS:
             	LogManager.getShared().logInfo("GrafterizerParser - parseAction() - rename columns action detected");

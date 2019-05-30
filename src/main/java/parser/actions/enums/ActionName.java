@@ -10,6 +10,9 @@ public class ActionName {
     public static final String RENAME_COLUMNS = "rename-columns";
     public static final String MERGE_COLUMNS = "merge-columns";
     public static final String SPLIT = "split";
+    public static final String SORT_DATASET = "sort-dataset";
+    public static final String GROUP_AGGREGATE = "group-rows";
+    public static final String DEDUPLICATE = "remove-duplicates";
     public static final String TAKE_COLUMNS = "columns";
     public static final String SHIFT_COLUMN = "shift-column";
 
