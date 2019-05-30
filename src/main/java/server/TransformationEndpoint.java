@@ -1,19 +1,24 @@
 package server;
 
+import static org.junit.Assert.fail;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.ArrayList;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import org.apache.spark.sql.DataFrameWriter;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
 import org.apache.spark.sql.SQLContext;
@@ -22,6 +27,9 @@ import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 import org.glassfish.jersey.media.multipart.FormDataParam;
 import org.json.JSONObject;
 
+import parser.GrafterizerParser;
+import parser.pipeline.Pipeline;
+import pipenineExecutor.PipelineExecutor;
 import utility.LogManager;
 
 @Path("/transformation")
@@ -83,11 +91,11 @@ public class TransformationEndpoint {
 			return Response.status(404).entity("Error during file upload" + e.getMessage()).build();
 		}
 
-		String output = "File uploaded to : " + fileLocation;
 		
 		// 2. Execute Transformation to file
+		String resultFilePath = null;
 		try {
-			executeTransformationToFile(fileLocation,pipelineJson);
+			resultFilePath = executeTransformationToFile(fileLocation,pipelineJson);
 		} catch (Exception e) {
 			LogManager.getShared().logError("Transformation Endpoint - POST/new - error during execution of transformation,  exception: "+e.getMessage());
 			return Response.status(404).entity("Error during transformation: " + e.getMessage()).build();
@@ -102,11 +110,15 @@ public class TransformationEndpoint {
 		LogManager.getShared().logSuccess("Transformation Endpoint - POST/new - old file deleted, at location: "+fileLocation);
 		
 		
-		return Response.status(200).entity(output).build();
+		return Response.status(200).entity(
+				"Your transformation has been appplied!"
+				+ " At the moment we have problem to retrive the result as csv, "
+				+ "but you can find it at this path: "+resultFilePath).build();
 	}
 
-	private void executeTransformationToFile(String  filePath, JSONObject pipeline) throws Exception{
+	private String executeTransformationToFile(String  filePath, JSONObject pipeline) throws Exception{
 		
+		// 0. Initialize Spark Session And Load Dataset
 		SparkSession sparkSession = SparkSession.builder()
                 .appName("jsonSparker")
                 .master("local")
@@ -117,8 +129,61 @@ public class TransformationEndpoint {
         Dataset<Row> dataset = sqlContext.read()
                 .option("header", true) //comment option if you dont want an header
                 .csv(filePath); 
+        
+        
+        
+        LogManager.getShared().logInfo("Transformation Endpoint - executeTransformationToFile - dataset before transformation");
         dataset.show();
+        
+        // 1. Execute transformation
+        dataset = executePipelineOnDataset(dataset, pipeline);
+        
+        LogManager.getShared().logSuccess("Transformation Endpoint - executeTransformationToFile - transformation executed");
+        
+        LogManager.getShared().logInfo("Transformation Endpoint - executeTransformationToFile - dataset after transformation");
+        dataset.show();
+        
+        
+        
+        // 2. Save output as csv into file
+        final String baseLocation = System.getProperty("java.io.tmpdir"); // new File("").getAbsolutePath();
+		String fileLocation = baseLocation + "transformationExecutedFolder";
+		//dataset.write().option("header", "true").csv(fileLocation);
+		dataset
+		.coalesce(1)
+		.write()
+	    .format("com.databricks.spark.csv")
+	    .mode("overwrite")
+	    .option("header", "true")
+	    .save(fileLocation);
+		LogManager.getShared().logSuccess("Transformation Endpoint - executeTransformationToFile - transformation csv file saved at path: "+fileLocation);
+		
+		
+		try {
+        	// TODO maybe remove close line
+	        sparkSession.close();
+        }catch(Exception e) {
+        	LogManager.getShared().logWarning("Transformation Endpoint - executeTransformationToFile - error during close spark session: "+e.getMessage());
+        }
+		
+		return fileLocation;
+		
+        
 	}
+	
+	private Dataset<Row> executePipelineOnDataset(Dataset<Row> input, JSONObject pipeline) throws Exception{
+		
+		// 0. Extract Action from pipeline JSON
+		GrafterizerParser parser = new GrafterizerParser();
+		ArrayList<Pipeline>  pipelineParsed = parser.parsePipelineJson(pipeline);
+		
+		// 1. Execute pipeline on Dataframe
+		input = PipelineExecutor.getShared().executePipeline(pipelineParsed, input);
+		
+		return input;
+		
+	}
+	
 	// save uploaded file to new location
 	private void writeToFile(InputStream uploadedInputStream, String uploadedFileLocation) throws Exception {
 
