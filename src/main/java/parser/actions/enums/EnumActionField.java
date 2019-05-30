@@ -28,10 +28,7 @@ public enum EnumActionField {
     SORT_TYPE("sorttype"),
     ORDER("order"),
     COLSORTMAP("colnamesSorttypesMap"),
-    ID("id"),
-    VALUE("value"),
-    FAB_IS_OPEN("fabIsOpen"),
-    COL_NAMES_FUNCTION_SET("colnamesFunctionsSet");
+    COL_NAMES_FUNCTION_SET("colnamesFunctionsSet"),
     COL_FROM("colFrom"),
     ID("id"),
     VALUE("value"),
