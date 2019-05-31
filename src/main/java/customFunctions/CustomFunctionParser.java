@@ -55,6 +55,23 @@ public class CustomFunctionParser {
 				return new LongCustomF();
 			case CustomFunctionEnumKey.DOUBLE_LITERAL:
 				return new DoubleLiteralCustomF();
+			case CustomFunctionEnumKey.INTEGER_LITERAL:
+				return new IntegerLiteralCustomF();
+			case CustomFunctionEnumKey.STRING_TO_NUMERIC:
+				return new StringToNumeriCustomF();
+			case CustomFunctionEnumKey.TITLEIZE:
+				return new TitleizeCustomF();
+			case CustomFunctionEnumKey.TRIM:
+				return new TrimCustomF();
+			case CustomFunctionEnumKey.TRIM_L:
+				return new LTrimCustomF();
+			case CustomFunctionEnumKey.TRIM_R:
+				return new RTrimCustomF();
+			case CustomFunctionEnumKey.TRIM_NL:
+				return new TrimNLCustomF();
+			case CustomFunctionEnumKey.REMOVE_BLANK:
+				return new RemoveBlankCustomF();
+				
 		}
 		
 		return null;
