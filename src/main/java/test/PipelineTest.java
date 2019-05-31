@@ -18,6 +18,75 @@ import pipenineExecutor.PipelineExecutor;
 public class PipelineTest {
 	
 	@Test
+	public void testDerive() {
+		
+		String json = "{\n" + 
+				"	\"pipelines\": [{\n" + 
+				"		\"functions\": [{\n" + 
+				"			\"isPreviewed\": false,\n" + 
+				"			\"newColName\": \"testt\",\n" + 
+				"			\"colsToDeriveFrom\": [{\n" + 
+				"				\"id\": 2,\n" + 
+				"				\"value\": \"age\"\n" + 
+				"			}],\n" + 
+				"			\"name\": \"derive-column\",\n" + 
+				"			\"displayName\": \"derive-column\",\n" + 
+				"			\"functionsToDeriveWith\": [{\n" + 
+				"				\"funct\": {\n" + 
+				"					\"id\": 6,\n" + 
+				"					\"clojureCode\": \"(defn double-literal [s] (if (nil? (re-matches #\\\"[0-9.]+\\\" s)) 0 (Double/parseDouble s)))\",\n" + 
+				"					\"group\": \"CONVERT DATATYPE\",\n" + 
+				"					\"name\": \"double-literal\"\n" + 
+				"				},\n" + 
+				"				\"functParams\": [],\n" + 
+				"				\"__type\": \"FunctionWithArgs\"\n" + 
+				"			}],\n" + 
+				"			\"__type\": \"DeriveColumnFunction\",\n" + 
+				"			\"docstring\": \"Derive column\"\n" + 
+				"		}],\n" + 
+				"		\"__type\": \"Pipeline\"\n" + 
+				"	}]\n" + 
+				"}";
+		
+		
+		JSONObject js = null;
+		try {
+			js = new JSONObject(json);
+		}catch(Exception e) {
+			e.printStackTrace();
+			fail("Excp occurred");
+		}
+		
+		// Is a json so parse it
+		GrafterizerParser parser = new GrafterizerParser();
+		ArrayList<Pipeline>  pipelineParsed = null;
+		try {
+			pipelineParsed = parser.parsePipelineJson(js);
+		}catch(Exception e) {
+			e.printStackTrace();
+			fail("Excp during parser occurred");
+		}
+		
+		// create simple Dataframe
+		 SparkSession sparkSession = SparkSession.builder()
+	                .appName("jsonSparker")
+	                .master("local")
+	                .getOrCreate();
+
+
+        SQLContext sqlContext = sparkSession.sqlContext();
+        Dataset<Row> dataset = sqlContext.read()
+                .option("header", true)
+                .csv("example-data.csv"); //comment option if you don t want an header
+        dataset.show();
+        
+        
+      
+        Dataset<Row> result = PipelineExecutor.getShared().executePipeline(pipelineParsed, dataset);
+        result.show();
+	}
+	
+	@Test
 	public void testDeduplicate() {
 		
 		String json = "{\n" + 

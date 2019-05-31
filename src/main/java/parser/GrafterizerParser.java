@@ -7,6 +7,7 @@ import parser.actions.AddColumns;
 import parser.actions.AddRow;
 import parser.actions.BaseAction;
 import parser.actions.Deduplicate;
+import parser.actions.DeriveColumn;
 import parser.actions.DropRows;
 import parser.actions.FilterRows;
 import parser.actions.GroupAndAggregate;
@@ -81,6 +82,7 @@ public class GrafterizerParser {
             return pipelineParsed;
 
         }catch (Exception e){
+        	e.printStackTrace();
             LogManager.getShared().logError("GrafterizerParser - parsePipelineJson() - msg: "+e.getMessage());
             throw new GrafterizerParserException(e.getMessage());
         }
@@ -191,6 +193,10 @@ public class GrafterizerParser {
             case ActionName.SHIFT_COLUMN:
             	LogManager.getShared().logInfo("GrafterizerParser - parseAction() - SHIFT_COLUMN  action detected");
                 return new ShiftColumn(actJs, progressNumber);
+                
+            case ActionName.DERIVE_COLUMN:
+            	LogManager.getShared().logInfo("GrafterizerParser - parseAction() - SHIFT_COLUMN  action detected");
+                return new DeriveColumn(actJs, progressNumber);
                 
             default:
                 LogManager.getShared().logError("GrafterizerParser - parseAction() -  action NOT detected");

@@ -15,6 +15,6 @@ public class ActionName {
     public static final String DEDUPLICATE = "remove-duplicates";
     public static final String TAKE_COLUMNS = "columns";
     public static final String SHIFT_COLUMN = "shift-column";
-
+    public static final String DERIVE_COLUMN = "derive-column";
 
 }
