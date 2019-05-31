@@ -154,8 +154,8 @@ public class AddColumns extends BaseAction {
 			// LogManager.getShared().logInfo("AddColumns - json given: "+js);
 			
 			// 0. Fab Is Open
-			if(js.isNull(EnumActionField.FAB_IS_OPEN.getVal())) throw new ActionException("FabIsOpen is missing");
-			this.fabIsOpen = js.getBoolean(EnumActionField.FAB_IS_OPEN.getVal());
+			if(!js.isNull(EnumActionField.FAB_IS_OPEN.getVal()))
+				this.fabIsOpen = js.getBoolean(EnumActionField.FAB_IS_OPEN.getVal());
 			
 			// 1. Columns Array
 			if(js.isNull(EnumActionField.COLUMNS_ARRAY.getVal())) throw new ActionException("Columns are missing");

@@ -11,6 +11,7 @@ import parser.actions.DeriveColumn;
 import parser.actions.DropRows;
 import parser.actions.FilterRows;
 import parser.actions.GroupAndAggregate;
+import parser.actions.MakeDataset;
 import parser.actions.RenameColumns;
 import parser.actions.ShiftColumn;
 import parser.actions.ShiftRow;
@@ -40,7 +41,8 @@ public class GrafterizerParser {
         // values
         CUSTOM_FUNCTION_DECLARATIONS_ARRAY("customFunctionDeclarations"),
         PIPELINES("pipelines"),
-        FUNCTIONS("functions");
+        FUNCTIONS("functions"),
+    	EXTRA("extra");
 
         private String field;
 
@@ -63,13 +65,19 @@ public class GrafterizerParser {
             if (js == null) {
                 throw new GrafterizerParserException("GrafterizerParser - parsePipelineJson() - input json is null");
             }
-
+            
+            // 0.B extract extra field (not required)
+            JSONObject extraJsonObject = js;
+            if (!js.isNull(PipelineField.EXTRA.getVal())) {
+            	extraJsonObject = js.getJSONObject(PipelineField.EXTRA.getVal());
+            }
+       
             // 1. extract pipelines
             JSONArray pipelineArray;
-            if (js.isNull(PipelineField.PIPELINES.getVal())) {
+            if (extraJsonObject.isNull(PipelineField.PIPELINES.getVal())) {
                 throw new GrafterizerParserException("GrafterizerParser - parsePipelineJson() - pipeline(s) field is missing in json");
             }
-            pipelineArray = js.getJSONArray(PipelineField.PIPELINES.getVal());
+            pipelineArray = extraJsonObject.getJSONArray(PipelineField.PIPELINES.getVal());
             LogManager.getShared().logSuccess("GrafterizerParser - parsePipelineJson() - Pipeline json array extracted");
 
             // 1. B
@@ -195,8 +203,12 @@ public class GrafterizerParser {
                 return new ShiftColumn(actJs, progressNumber);
                 
             case ActionName.DERIVE_COLUMN:
-            	LogManager.getShared().logInfo("GrafterizerParser - parseAction() - SHIFT_COLUMN  action detected");
+            	LogManager.getShared().logInfo("GrafterizerParser - parseAction() - DERIVE_COLUMN  action detected");
                 return new DeriveColumn(actJs, progressNumber);
+                
+            case ActionName.MAKE_DATASET:
+            	LogManager.getShared().logInfo("GrafterizerParser - parseAction() - MAKE_DATASET  action detected");
+                return new MakeDataset(actJs, progressNumber);
                 
             default:
                 LogManager.getShared().logError("GrafterizerParser - parseAction() -  action NOT detected");
