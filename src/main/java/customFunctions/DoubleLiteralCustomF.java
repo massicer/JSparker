@@ -4,6 +4,7 @@ import static org.apache.spark.sql.functions.callUDF;
 import static org.apache.spark.sql.functions.col;
 
 import java.io.StringReader;
+import utility.LogManager;
 
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
@@ -26,7 +27,8 @@ public class DoubleLiteralCustomF extends BaseCustomFunction {
 
 	@Override
 	public Dataset<Row> execute(Dataset<Row> input) {
-		 
+		LogManager.getShared().logInfo(
+                "CALLED double literal EXECUTE");
 		final String clCode = "(ns user) " + this.clojureCode;
 
 		UDF1<String, Double> udf = row -> {
@@ -36,7 +38,10 @@ public class DoubleLiteralCustomF extends BaseCustomFunction {
 			clojure.lang.Compiler.load(new java.io.StringReader(clCode));
 			clojure.lang.IFn foo1 = clojure.java.api.Clojure.var("user", "double-literal");
 			Object result1 = foo1.invoke(row);
-            return (Double)result1;
+			if (result1 instanceof Number) {
+			    return Double.valueOf(((Number) result1).doubleValue());
+			}
+            return (Double) result1;
         };
 
         //this is not mandatory
