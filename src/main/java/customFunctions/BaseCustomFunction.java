@@ -3,6 +3,8 @@ package customFunctions;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
 
+import parser.actions.ActionException;
+
 public abstract class BaseCustomFunction {
 	
 	protected String newColName;

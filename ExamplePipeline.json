@@ -29,6 +29,26 @@
 		"__type": "AddColumnsFunction",
 		"$$hashKey": "object:252",
 		"fabIsOpen": false
+	},
+	
+	{
+		"isPreviewed": false,
+		"name": "python_custom_function",
+		"displayName": "python_custom_function",
+		"pythonFunctionName": "sum",
+		"pythonCode": "def sum (a):\n\treturn 2",
+		"newColName": "colFromPython",
+		"columnsArray": [
+		{
+			"colName": "id",
+			"colValue": ""
+		}
+		],
+		"docstring": "Execute python script and create nee column",
+		"__type": "AddColumnsFunction",
+		"$$hashKey": "object:252",
+		"fabIsOpen": false
 	}
+	
 ]
     }]}

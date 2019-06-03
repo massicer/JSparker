@@ -6,6 +6,7 @@ import utility.*;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
 
+import parser.actions.ActionException;
 import parser.actions.BaseAction;
 import parser.pipeline.Pipeline;
 
@@ -18,7 +19,7 @@ public class PipelineExecutor {
 		return shared;
 	}
 
-	public Dataset<Row> executePipeline( ArrayList<Pipeline> pipelines, Dataset<Row> input) {
+	public Dataset<Row> executePipeline( ArrayList<Pipeline> pipelines, Dataset<Row> input){
 		
 		if( pipelines == null) {
 			LogManager.getShared().logError("executePipeline - pipelines are null");

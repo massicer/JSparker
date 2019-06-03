@@ -33,6 +33,8 @@ public enum EnumActionField {
     ID("id"),
     VALUE("value"),
     SHIFT_COL_MODE("shiftcolmode"),
+    PYTHON_CODE("pythonCode"),
+    PYTHON_ACTION_NAME("pythonFunctionName"),
     FAB_IS_OPEN("fabIsOpen");
 
     private String field;

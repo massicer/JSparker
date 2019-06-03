@@ -23,6 +23,7 @@ import parser.actions.enums.ActionName;
 import parser.actions.enums.EnumActionField;
 import parser.pipeline.GrafterizerParserException;
 import parser.pipeline.Pipeline;
+import pythonCustomFunction.PythonCustomFunction;
 import utility.LogManager;
 import java.util.ArrayList;
 
@@ -209,6 +210,10 @@ public class GrafterizerParser {
             case ActionName.MAKE_DATASET:
             	LogManager.getShared().logInfo("GrafterizerParser - parseAction() - MAKE_DATASET  action detected");
                 return new MakeDataset(actJs, progressNumber);
+                
+            case ActionName.PYTHON_CUSTOM_FUNCTION:
+            	LogManager.getShared().logInfo("GrafterizerParser - parseAction() - PYTHON_CUSTOM_FUNCTION  no action detected");
+                return new PythonCustomFunction(actJs, progressNumber);
                 
             default:
                 LogManager.getShared().logError("GrafterizerParser - parseAction() -  action NOT detected");

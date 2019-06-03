@@ -69,7 +69,7 @@ public class DeriveColumn extends BaseAction {
 	}
 
 	@Override
-	public Dataset<Row> actionToExecute(Dataset<Row> input) {
+	public Dataset<Row> actionToExecute(Dataset<Row> input){
 		
 		for (int i = 0; i< this.allCustomFunctions.length; i++) {
 			input = this.allCustomFunctions[i].execute(input);
