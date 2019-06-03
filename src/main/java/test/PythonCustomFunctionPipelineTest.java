@@ -34,7 +34,7 @@ public class PythonCustomFunctionPipelineTest {
 						"		\"newColName\": \"colFromPython\",\n" + 
 						"		\"columnsArray\": [\n" + 
 						"		{\n" + 
-						"			\"colName\": \"id\",\n" + 
+						"			\"colName\": \"street\",\n" + 
 						"			\"colValue\": \"\"\n" + 
 						"		}\n" + 
 						"		],\n" + 

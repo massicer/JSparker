@@ -2,6 +2,7 @@ package pythonCustomFunction;
 
 
 
+import static org.apache.spark.sql.functions.callUDF;
 import static org.apache.spark.sql.functions.col;
 
 import java.util.ArrayList;
@@ -9,6 +10,7 @@ import java.util.ArrayList;
 import org.apache.spark.sql.Column;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
+import org.apache.spark.sql.api.java.UDF1;
 import org.apache.spark.sql.types.DataTypes;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -187,6 +189,8 @@ public class PythonCustomFunction extends BaseAction {
 	// Works for only one parameter
 	private Dataset<Row> executePythonScriptOneParameter(Dataset<Row> input) {
 		
+		/*
+		 * Questo funziona
 		LogManager.getShared().logInfo("PythonCustomFunction -  executePythonScriptOneParameter - preparing to execute");
 		
 		Column a = col(this.colsToApply.get(0).colName);
@@ -194,6 +198,31 @@ public class PythonCustomFunction extends BaseAction {
 		
 		//input = input.withColumn(newColName, col(super.colsToApply[0]));
 		LogManager.getShared().logInfo("PythonCustomFunction -  executed with result: "+result + result.toString());
+		
+		return input;
+		
+		*/
+		LogManager.getShared().logInfo("PythonCustomFunction - executePythonScriptOneParameter -  preparing to create custom function");
+		UDF1<String, String> udf = row -> {
+			
+			Object result1 = func.__call__(new PyString("parametrooooo"));
+            return (String)result1;
+        };
+
+		LogManager.getShared().logInfo("PythonCustomFunction - executePythonScriptOneParameter -  custom function Created");
+        //this is not mandatory
+        //input.sparkSession().sparkContext().addJar("/Users/davideceresola/Downloads/clojure/clojure.jar");
+        //input.sparkSession().sparkContext().addJar("/Users/davideceresola/Downloads/clojure/spec.alpha-0.2.176.jar");
+        input.sqlContext().udf().register(this.CustomFunctionName, udf, DataTypes.StringType);
+		LogManager.getShared().logInfo("PythonCustomFunction - executePythonScriptOneParameter -  custom function registered");
+
+	
+        Column colTarget = col(this.colsToApply.get(0).colName);
+		LogManager.getShared().logInfo("PythonCustomFunction - executePythonScriptOneParameter -  column target extracted: "+ colTarget);
+
+        input = input.withColumn(this.newColName, callUDF(this.CustomFunctionName, colTarget));
+		LogManager.getShared().logInfo("PythonCustomFunction - executePythonScriptOneParameter -  custom function applyed at column target");
+
 		
 		return input;
 		
