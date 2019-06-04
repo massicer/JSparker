@@ -171,7 +171,7 @@
 							<goal>copy-resources</goal>
 						</goals>
 						<configuration>
-							<outputDirectory>${basedir}/target/Crunchify</outputDirectory>
+							<outputDirectory>${basedir}/target/JSparkerOutput</outputDirectory>
 							<resources>
 								<resource>
 									<directory>resources</directory>
@@ -193,7 +193,7 @@
 							<goal>copy-dependencies</goal>
 						</goals>
 						<configuration>
-							<outputDirectory>${project.build.directory}/Crunchify/lib</outputDirectory>
+							<outputDirectory>${project.build.directory}/JSparker/lib</outputDirectory>
 							<overWriteReleases>false</overWriteReleases>
 							<overWriteSnapshots>false</overWriteSnapshots>
 							<overWriteIfNewer>true</overWriteIfNewer>
@@ -216,7 +216,7 @@
 						</manifestEntries>
 					</archive>
  
-					<finalName>Crunchify/Crunchify</finalName>
+					<finalName>JSparker/JsparkerExecutable</finalName>
 				</configuration>
 			</plugin>
 			</plugins>
