@@ -1,0 +1,49 @@
+{"pipelines": [{
+	"functions": [{
+		"name": "make-dataset",
+		"displayName": "make-dataset",
+		"isPreviewed": false,
+		"columnsArray": [],
+		"useLazy": false,
+		"moveFirstRowToHeader": true,
+		"__type": "MakeDatasetFunction",
+		"docstring": "Create headers"
+	}, {
+		"isPreviewed": false,
+		"newColName": "Unite",
+		"colsToMerge": [{
+			"id": 0,
+			"value": "name"
+		}, {
+			"id": 3,
+			"value": "street"
+		}],
+		"name": "merge-columns",
+		"displayName": "merge-columns",
+		"separator": "-",
+		"__type": "MergeColumnsFunction",
+		"docstring": "Merge columns"
+	}, {
+		"isPreviewed": false,
+		"newColName": "DerivataCOnCLJ",
+		"colsToDeriveFrom": [{
+			"id": 2,
+			"value": "age"
+		}],
+		"name": "derive-column",
+		"displayName": "derive-column",
+		"functionsToDeriveWith": [{
+			"funct": {
+				"id": 6,
+				"clojureCode": "(defn double-literal [s] (if (nil? (re-matches #\"[0-9.]+\" s)) 0 (Double/parseDouble s)))",
+				"group": "CONVERT DATATYPE",
+				"name": "double-literal"
+			},
+			"functParams": [],
+			"__type": "FunctionWithArgs"
+		}],
+		"__type": "DeriveColumnFunction",
+		"docstring": "Derive column"
+	}],
+	"__type": "Pipeline"
+    }]}
