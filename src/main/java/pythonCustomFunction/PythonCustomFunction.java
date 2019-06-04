@@ -5,6 +5,7 @@ package pythonCustomFunction;
 import static org.apache.spark.sql.functions.callUDF;
 import static org.apache.spark.sql.functions.col;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import org.apache.spark.sql.Column;
@@ -15,6 +16,7 @@ import org.apache.spark.sql.types.DataTypes;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.python.core.PyFunction;
+import org.python.core.PyObject;
 import org.python.core.PyString;
 import org.python.util.PythonInterpreter;
 
@@ -25,7 +27,8 @@ import parser.actions.BaseAction.ActionType;
 import parser.actions.enums.EnumActionField;
 import utility.LogManager;
 
-public class PythonCustomFunction extends BaseAction {
+public class PythonCustomFunction extends BaseAction implements Serializable{
+	
 	
 	// column class used to store colums into array
 		private static class SingleColumn {
@@ -205,8 +208,14 @@ public class PythonCustomFunction extends BaseAction {
 		LogManager.getShared().logInfo("PythonCustomFunction - executePythonScriptOneParameter -  preparing to create custom function");
 		UDF1<String, String> udf = row -> {
 			
-			Object result1 = func.__call__(new PyString("parametrooooo"));
-            return (String)result1;
+			
+			LogManager.getShared().logInfo("PythonCustomFunction - executePythonScriptOneParameter - preparing to execute UDF1 with row param: "+row);
+			PyObject res = func.__call__(new PyString("parametrooooo"));
+			// LogManager.getShared().logInfo("PythonCustomFunction - executePythonScriptOneParameter - executed UDF1 with row param: "+row+" result is: "+(String)result1);
+
+            // return (String)result1;
+            
+			return "daiCheFunziona";
         };
 
 		LogManager.getShared().logInfo("PythonCustomFunction - executePythonScriptOneParameter -  custom function Created");

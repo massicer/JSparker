@@ -212,7 +212,7 @@ public class GrafterizerParser {
                 return new MakeDataset(actJs, progressNumber);
                 
             case ActionName.PYTHON_CUSTOM_FUNCTION:
-            	LogManager.getShared().logInfo("GrafterizerParser - parseAction() - PYTHON_CUSTOM_FUNCTION  no action detected");
+            	LogManager.getShared().logInfo("GrafterizerParser - parseAction() - PYTHON_CUSTOM_FUNCTION action detected");
                 return new PythonCustomFunction(actJs, progressNumber);
                 
             default:
