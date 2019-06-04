@@ -2,6 +2,7 @@ package export;
 
 import static org.junit.Assert.fail;
 
+import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -63,48 +64,22 @@ public class JarExecutor {
 	}
 	
 	private static JSONObject readJsonInstruction(String resourceName) throws JSONException {
-		/* 
-		String json = "{\n" + 
-				"	\"pipelines\": [{\n" + 
-				"		\"functions\": [{\n" + 
-				"			\"isPreviewed\": false,\n" + 
-				"			\"newColName\": \"testt\",\n" + 
-				"			\"colsToDeriveFrom\": [{\n" + 
-				"				\"id\": 2,\n" + 
-				"				\"value\": \"age\"\n" + 
-				"			}],\n" + 
-				"			\"name\": \"derive-column\",\n" + 
-				"			\"displayName\": \"derive-column\",\n" + 
-				"			\"functionsToDeriveWith\": [{\n" + 
-				"				\"funct\": {\n" + 
-				"					\"id\": 6,\n" + 
-				"					\"clojureCode\": \"(defn double-literal [s] (if (nil? (re-matches #\\\"[0-9.]+\\\" s)) 0 (Double/parseDouble s)))\",\n" + 
-				"					\"group\": \"CONVERT DATATYPE\",\n" + 
-				"					\"name\": \"double-literal\"\n" + 
-				"				},\n" + 
-				"				\"functParams\": [],\n" + 
-				"				\"__type\": \"FunctionWithArgs\"\n" + 
-				"			}],\n" + 
-				"			\"__type\": \"DeriveColumnFunction\",\n" + 
-				"			\"docstring\": \"Derive column\"\n" + 
-				"		}],\n" + 
-				"		\"__type\": \"Pipeline\"\n" + 
-				"	}]\n" + 
-				"}";
 		
-		
-		JSONObject js = null;
-		js = new JSONObject(json);
-		return js;
-		*/
-
-        InputStream is = JarExecutor.class.getResourceAsStream(resourceName);
-        if (is == null) {
-            throw new NullPointerException("Cannot find resource file " + resourceName);
+        String result = "";
+        try {
+            BufferedReader br = new BufferedReader(new FileReader(resourceName));
+            StringBuilder sb = new StringBuilder();
+            String line = br.readLine();
+            while (line != null) {
+                sb.append(line);
+                line = br.readLine();
+            }
+            result = sb.toString();
+        } catch(Exception e) {
+            e.printStackTrace();
         }
 
-        JSONTokener tokener = new JSONTokener(is);
-        JSONObject object = new JSONObject(tokener);
+        JSONObject object = new JSONObject(result);
         return object;
  
 
