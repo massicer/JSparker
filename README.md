@@ -36,5 +36,10 @@ Returns the transformation defined in the` pipeline json` applied to a `.csv fil
 | `file`   | your csv file              |
 | `pipeline` | your json pipeline     |
 
+#### Export jar
+run `mvn package` from the main directory of the project
+mvn package uses 'fat jar' to generate the jar
 
+#### Run in jar mode
+`spark-submit --class export.JarExecutor --master local[*] --files /Users/davideceresola/git/JSparker/example-data.csv,/Users/davideceresola/git/JSparker/ExamplePipeline.json /Users/davideceresola/git/JSparker/target/jSparkerWebApp-0.0.1-SNAPSHOT.jar /Users/davideceresola/git/JSparker/example-data.csv  /Users/davideceresola/git/JSparker/ExamplePipeline.json`
 
