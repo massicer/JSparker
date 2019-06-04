@@ -64,7 +64,39 @@ public class JarExecutor {
 	
 	private static JSONObject readJsonInstruction(String resourceName) throws JSONException {
 		 
-
+		String json = "{\n" + 
+				"	\"pipelines\": [{\n" + 
+				"		\"functions\": [{\n" + 
+				"			\"isPreviewed\": false,\n" + 
+				"			\"newColName\": \"testt\",\n" + 
+				"			\"colsToDeriveFrom\": [{\n" + 
+				"				\"id\": 2,\n" + 
+				"				\"value\": \"age\"\n" + 
+				"			}],\n" + 
+				"			\"name\": \"derive-column\",\n" + 
+				"			\"displayName\": \"derive-column\",\n" + 
+				"			\"functionsToDeriveWith\": [{\n" + 
+				"				\"funct\": {\n" + 
+				"					\"id\": 6,\n" + 
+				"					\"clojureCode\": \"(defn double-literal [s] (if (nil? (re-matches #\\\"[0-9.]+\\\" s)) 0 (Double/parseDouble s)))\",\n" + 
+				"					\"group\": \"CONVERT DATATYPE\",\n" + 
+				"					\"name\": \"double-literal\"\n" + 
+				"				},\n" + 
+				"				\"functParams\": [],\n" + 
+				"				\"__type\": \"FunctionWithArgs\"\n" + 
+				"			}],\n" + 
+				"			\"__type\": \"DeriveColumnFunction\",\n" + 
+				"			\"docstring\": \"Derive column\"\n" + 
+				"		}],\n" + 
+				"		\"__type\": \"Pipeline\"\n" + 
+				"	}]\n" + 
+				"}";
+		
+		
+		JSONObject js = null;
+		js = new JSONObject(json);
+		return js;
+		/*
         InputStream is = JarExecutor.class.getResourceAsStream(resourceName);
         if (is == null) {
             throw new NullPointerException("Cannot find resource file " + resourceName);
@@ -73,6 +105,7 @@ public class JarExecutor {
         JSONTokener tokener = new JSONTokener(is);
         JSONObject object = new JSONObject(tokener);
         return object;
+        */
  
 
 	}
@@ -87,7 +120,8 @@ public class JarExecutor {
         SQLContext sqlContext = sparkSession.sqlContext();
         Dataset<Row> dataset = sqlContext.read()
                 .option("header", true)
-                .csv(inputCsvPath); //comment option if you dont want an header
+                .csv("example-data.csv");
+                // .csv(inputCsvPath); //comment option if you dont want an header
        
         return dataset;
 	}
