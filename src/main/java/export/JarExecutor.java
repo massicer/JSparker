@@ -63,7 +63,7 @@ public class JarExecutor {
 	}
 	
 	private static JSONObject readJsonInstruction(String resourceName) throws JSONException {
-		 
+		/* 
 		String json = "{\n" + 
 				"	\"pipelines\": [{\n" + 
 				"		\"functions\": [{\n" + 
@@ -96,7 +96,8 @@ public class JarExecutor {
 		JSONObject js = null;
 		js = new JSONObject(json);
 		return js;
-		/*
+		*/
+
         InputStream is = JarExecutor.class.getResourceAsStream(resourceName);
         if (is == null) {
             throw new NullPointerException("Cannot find resource file " + resourceName);
@@ -105,7 +106,6 @@ public class JarExecutor {
         JSONTokener tokener = new JSONTokener(is);
         JSONObject object = new JSONObject(tokener);
         return object;
-        */
  
 
 	}
@@ -120,8 +120,8 @@ public class JarExecutor {
         SQLContext sqlContext = sparkSession.sqlContext();
         Dataset<Row> dataset = sqlContext.read()
                 .option("header", true)
-                .csv("example-data.csv");
-                // .csv(inputCsvPath); //comment option if you dont want an header
+                //.csv("example-data.csv");
+                .csv(inputCsvPath); //comment option if you dont want an header
        
         return dataset;
 	}
