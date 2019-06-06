@@ -1,0 +1,35 @@
+{"pipelines": [
+    {
+    "functions": [
+    {
+    "isPreviewed": false,
+    "indexFrom": 0,
+    "indexTo": 2,
+    "name": "drop-rows",
+    "displayName": "drop-rows",
+    "docstring": "Drop 2 first row(s)",
+    "take": false,
+    "__type": "DropRowsFunction",
+    "$$hashKey": "object:246"
+    },
+    {
+		"isPreviewed": false,
+		"name": "add-columns",
+		"displayName": "add-columns",
+		"columnsArray": [
+		{
+			"colName": "id",
+			"colValue": "",
+			"specValue": "Row number",
+			"expression": null,
+			"__type": "NewColumnSpec"
+		}
+		],
+		"docstring": "Add new column",
+		"__type": "AddColumnsFunction",
+		"$$hashKey": "object:252",
+		"fabIsOpen": false
+	},
+	
+]
+    }]}
