@@ -1,4 +1,4 @@
-package test;
+package jSparkerWebApp;
 
 import static org.junit.Assert.*;
 
