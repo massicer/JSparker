@@ -104,7 +104,7 @@ public class JarExecutor {
 	private static Dataset<Row> initSparkSession(String inputCsvPath) {
 		SparkSession sparkSession = SparkSession.builder()
                 .appName("jsonSparker")
-                .master("local")
+                // .master("local")
                 .getOrCreate();
 
 

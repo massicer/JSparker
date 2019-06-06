@@ -54,4 +54,5 @@ run `mvn package` from the main directory of the project
 - the `json pipeline`generated from grafterizer
 - The file paths must be absolutely path
 - Type this command to run the jar `spark-submit --class export.JarExecutor --master local[*]  JsparkerExecutable.jar example-data.csv ExamplePipeline.json`
+- to run in different cluster mode `spark-submit  --class export.JarExecutor  --master spark://127.0.0.1:6066  JsparkerExecutable.jar example-data.csv ExamplePipeline.json`
 
