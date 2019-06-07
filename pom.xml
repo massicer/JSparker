@@ -182,6 +182,9 @@
                     <descriptorRefs>
                         <descriptorRef>jar-with-dependencies</descriptorRef>
                     </descriptorRefs>
+                    <outputDirectory>${project.build.directory}/JSparker</outputDirectory>
+                    <finalName>JsparkerExecutable</finalName>
+                    
                 </configuration>
                 <executions>
                     <execution>
