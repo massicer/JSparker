@@ -7,7 +7,7 @@ import org.junit.Rule;
 import org.junit.Test;
 
 import com.github.tomakehurst.wiremock.junit.WireMockRule;
-
+import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import it.unimib.disco.asia.*;
 
 public class ASIA4JTest {
@@ -41,7 +41,7 @@ public class ASIA4JTest {
         Assert.assertEquals(httpClient, sameHttpClient);
     }
 
-    /*
+  
     @Test
     public void testHashClient() {
         asiaService.stubFor(get(urlMatching("/reconcile?.*"))
@@ -83,6 +83,7 @@ public class ASIA4JTest {
                 3,
                 asiaService.countRequestsMatching(getRequestedFor(urlMatching("/reconcile?.*")).build()).getCount());
     }
+
 
     @Test
     public void testReconciliation() {
@@ -198,6 +199,7 @@ public class ASIA4JTest {
                 client.reconcile("Berlin", "A.ADM1", 0.1, "geonames"));
     }
 
+ 
 
     @Test
     public void testExtension() {
@@ -384,6 +386,6 @@ public class ASIA4JTest {
         Assert.assertEquals("http://www.wikidata.org/entity/Q49295412",
                 client.geoExactMatch("Milan", "dbpedia", "wikidata"));
     }
-    */
+   
 
 }

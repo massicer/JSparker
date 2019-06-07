@@ -17,5 +17,6 @@ public class ActionName {
     public static final String SHIFT_COLUMN = "shift-column";
     public static final String DERIVE_COLUMN = "derive-column";
     public static final String MAKE_DATASET = "make-dataset";
+    public static final String ASIA4J_MAP = "asia4-map";
     
 }

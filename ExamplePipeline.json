@@ -29,6 +29,22 @@
 		"__type": "AddColumnsFunction",
 		"$$hashKey": "object:252",
 		"fabIsOpen": false
+	},
+	{
+		"isPreviewed": false,
+		"name": "asia4-map",
+		"displayName": "asia4-map",
+		"newColName": "nuovoNome",
+		"columnTarget": 
+		{
+			"id": 0,
+			"value": ""
+		}
+		,
+		"docstring": "Add new column",
+		"__type": "AddColumnsFunction",
+		"$$hashKey": "object:252",
+		"fabIsOpen": false
 	}
 ]
     }]}

@@ -3,6 +3,7 @@ package parser;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import parser.actions.ASIA4J_Mapping;
 import parser.actions.AddColumns;
 import parser.actions.AddRow;
 import parser.actions.BaseAction;
@@ -55,8 +56,12 @@ public class GrafterizerParser {
         }
     }
 
-    // Pipeline could be more than one
     public ArrayList<Pipeline> parsePipelineJson(JSONObject js) throws GrafterizerParserException {
+    	return parsePipelineJson(js, null);
+    }
+    
+    // Pipeline could be more than one
+    public ArrayList<Pipeline> parsePipelineJson(JSONObject js, String asia4jEndpointUrl) throws GrafterizerParserException {
         LogManager.getShared().logInfo("GrafterizerParser - parsePipelineJson() - Preparing to parse pipeline");
 
         try {
@@ -83,7 +88,7 @@ public class GrafterizerParser {
             // 1. B
             ArrayList<Pipeline> pipelineParsed = new ArrayList<>();
             LogManager.getShared().logInfo("GrafterizerParser - parsePipelineJson() - Preparing to extract every pipeline");
-            pipelineParsed = parseEachFunctionInEachPipeline(pipelineArray);
+            pipelineParsed = parseEachFunctionInEachPipeline(pipelineArray, asia4jEndpointUrl);
             LogManager.getShared().logSuccess("GrafterizerParser - parsePipelineJson() - Pipeline(s) extracted");
 
             // 1. C return pipelines
@@ -96,7 +101,7 @@ public class GrafterizerParser {
         }
     }
 
-    public ArrayList<Pipeline> parseEachFunctionInEachPipeline(JSONArray jA) throws Exception {
+    public ArrayList<Pipeline> parseEachFunctionInEachPipeline(JSONArray jA, String asia4jEnpointUrl) throws Exception {
 
         LogManager.getShared().logInfo("GrafterizerParser - parseEachFunctionInEachPipeline() - Preparing to parse each pipeline obj");
         ArrayList<Pipeline> pipelines = new ArrayList<>();
@@ -125,7 +130,7 @@ public class GrafterizerParser {
                         "GrafterizerParser - parseEachFunctionInEachPipeline() - Preparing to parse function at index # "+j +" of pipeline at index: "+i);
 
                 // parse and add action to the current pipelines
-                pipelines.get(i).addAction(parseAction((functionObj).getJSONObject(j), j));
+                pipelines.get(i).addAction(parseAction((functionObj).getJSONObject(j), j,asia4jEnpointUrl));
             }
 
         }
@@ -135,7 +140,7 @@ public class GrafterizerParser {
 
     }
 
-    public BaseAction parseAction(JSONObject actJs, int progressNumber) throws Exception {
+    public BaseAction parseAction(JSONObject actJs, int progressNumber, String asia4jUrl) throws Exception {
 
         LogManager.getShared().logInfo(
                 "GrafterizerParser - parseAction() - Preparing to parse single action");
@@ -209,6 +214,10 @@ public class GrafterizerParser {
             case ActionName.MAKE_DATASET:
             	LogManager.getShared().logInfo("GrafterizerParser - parseAction() - MAKE_DATASET  action detected");
                 return new MakeDataset(actJs, progressNumber);
+                
+            case ActionName.ASIA4J_MAP:
+            	LogManager.getShared().logInfo("GrafterizerParser - parseAction() - ASIA4J_MAP  action detected");
+                return new ASIA4J_Mapping(actJs, progressNumber, asia4jUrl);
                 
             default:
                 LogManager.getShared().logError("GrafterizerParser - parseAction() -  action NOT detected");

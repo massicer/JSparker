@@ -33,6 +33,7 @@ public enum EnumActionField {
     ID("id"),
     VALUE("value"),
     SHIFT_COL_MODE("shiftcolmode"),
+    COL_TARGET("columnTarget"),
     FAB_IS_OPEN("fabIsOpen");
 
     private String field;

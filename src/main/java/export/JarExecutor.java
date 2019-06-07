@@ -64,10 +64,19 @@ public class JarExecutor {
 		JSONObject transf = readJsonInstruction(jsonPath);
 		LogManager.getShared().logSuccess("JarExecutor - main - json parsed");
 		
+		// 2.B get asia backend url
+		String asiaBackendUrl = null;
+		if(args.length > 3 ) {
+			asiaBackendUrl = args[3];
+			LogManager.getShared().logInfo("JarExecutor - main - asiaBackend url: "+asiaBackendUrl);
+		}else {
+			LogManager.getShared().logWarning("JarExecutor - main - asiaBakcned url is missing. This may cause a problem if your pipeline cointains some asia4 map action");
+		}
+		
 		// 3. Parse instruction
 		LogManager.getShared().logInfo("JarExecutor - main - preparing to parse pipeline");
 		GrafterizerParser parser = new GrafterizerParser();
-		ArrayList<Pipeline>  pipelineParsed = parser.parsePipelineJson(transf);
+		ArrayList<Pipeline>  pipelineParsed = parser.parsePipelineJson(transf,asiaBackendUrl);
 		LogManager.getShared().logSuccess("JarExecutor - main - pipeline parsed");
 		
 		// 4. Apply every instruction
