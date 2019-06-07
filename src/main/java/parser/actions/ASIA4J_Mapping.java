@@ -97,12 +97,13 @@ public class ASIA4J_Mapping extends BaseAction {
 
 		UDF1<String, String> udf = row -> {
 			
+			// TODO: farlo funzionare con non so che criterio e sopratutto con dati veri
 			String result = hClient.reconcile("Berlin", "A.ADM1", 0.1, "geonames");
 			System.out.println("***********\n"+result);
-			/*
+			
 			return result;
-			*/
-			return "workInProgress";
+			
+			// return "workInProgress";
 		};
 
 		input.sqlContext().udf().register("asia4mapping", udf, DataTypes.StringType);
