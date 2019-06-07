@@ -106,7 +106,14 @@
 		</dependency>
 		
 		
-		
+		<dependency>
+		  <groupId>stuff</groupId>
+		  <artifactId>library</artifactId>
+		  <version>1.0</version>
+		  <systemPath>${project.basedir}/asia4j-1.0-SNAPSHOT-jar-with-dependencies.jar</systemPath>
+		  <scope>system</scope>
+		</dependency>
+				
 
 	</dependencies>
 
@@ -167,6 +174,25 @@
 			</plugins>
 		</pluginManagement>
 		<plugins>
+		 <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <version>3.1.1</version>
+                <configuration>
+                    <descriptorRefs>
+                        <descriptorRef>jar-with-dependencies</descriptorRef>
+                    </descriptorRefs>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>make-assembly</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
 			<plugin>
 				<artifactId>maven-resources-plugin</artifactId>
 				<version>2.6</version>

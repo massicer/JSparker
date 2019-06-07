@@ -1,4 +1,4 @@
-package asia4jIntegration;
+package test;
 
 
 import org.junit.Assert;

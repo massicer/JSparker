@@ -66,8 +66,8 @@ public class JarExecutor {
 		
 		// 2.B get asia backend url
 		String asiaBackendUrl = null;
-		if(args.length > 3 ) {
-			asiaBackendUrl = args[3];
+		if(args.length >= 3 ) {
+			asiaBackendUrl = args[2];
 			LogManager.getShared().logInfo("JarExecutor - main - asiaBackend url: "+asiaBackendUrl);
 		}else {
 			LogManager.getShared().logWarning("JarExecutor - main - asiaBakcned url is missing. This may cause a problem if your pipeline cointains some asia4 map action");
