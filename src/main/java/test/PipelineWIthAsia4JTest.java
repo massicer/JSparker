@@ -74,7 +74,7 @@ public class PipelineWIthAsia4JTest {
 				"		\"columnTarget\": \n" + 
 				"		{\n" + 
 				"			\"id\": 0,\n" + 
-				"			\"value\": \"\"\n" + 
+				"			\"value\": \"street\"\n" + 
 				"		}\n" + 
 				"		,\n" + 
 				"		\"docstring\": \"Add new column\",\n" + 

@@ -96,15 +96,16 @@ public class ASIA4J_Mapping extends BaseAction {
 		ASIA4J hClient = ASIA4JFactory.getClient(asia4jEndpointUrl, ASIAHashtableClient.class);
 
 		UDF1<String, String> udf = row -> {
-
 			
 			String result = hClient.reconcile("Berlin", "A.ADM1", 0.1, "geonames");
 			System.out.println("***********\n"+result);
+			/*
 			return result;
+			*/
+			return "workInProgress";
 		};
 
 		input.sqlContext().udf().register("asia4mapping", udf, DataTypes.StringType);
-		// input = input.withColumn(newColName, callUDF("titleize", col(colToApplyName)));
 		input = input.withColumn(newColName, callUDF("asia4mapping", col(colToApply.value)));
 		return input;
 	}
