@@ -25,14 +25,14 @@ public static void main (String[] args) throws Exception {
 		LogManager.getShared().logInfo("JarExecutor - main - starting execution with "+args.length+" parameters");
 
 		// 0. Check if parameters are present
-		/*
+		
 		if(args.length < 2) {
 			LogManager.getShared().logError("JarExecutor - main - parameters must be >= 2");
 			throw new Exception("Jar executor Ex -  parameters missing - parameters must be >= 2");
-		}*/
+		}
 		
 		// 1.A get the file path
-		String inputFilePath = "example-data.csv"; //args[0];
+		String inputFilePath = args[0];
 		LogManager.getShared().logInfo("JarExecutor - main - input data file path: "+inputFilePath);
 		
 		// 1.B init spark passing info
@@ -41,7 +41,7 @@ public static void main (String[] args) throws Exception {
 		LogManager.getShared().logSuccess("JarExecutor - main -  Spark session initialized");
 		
 		// 2. Get the json path
-		String jsonPath = "ExamplePipeline.json"; //args[1];
+		String jsonPath = args[1];
 		LogManager.getShared().logInfo("JarExecutor - main - pipeline file path: "+jsonPath);
 		LogManager.getShared().logInfo("JarExecutor - main - preparing to parse json");
 		JSONObject transf = readJsonInstruction(jsonPath);
