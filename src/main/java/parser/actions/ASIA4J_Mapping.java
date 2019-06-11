@@ -3,6 +3,8 @@ package parser.actions;
 import static org.apache.spark.sql.functions.callUDF;
 import static org.apache.spark.sql.functions.col;
 
+import org.apache.spark.SparkContext;
+import org.apache.spark.broadcast.Broadcast;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
 import org.apache.spark.sql.api.java.UDF1;
@@ -92,13 +94,20 @@ public class ASIA4J_Mapping extends BaseAction {
 	@Override
 	public Dataset<Row> actionToExecute(Dataset<Row> input) {
 
-		// Create client
-		ASIA4J hClient = ASIA4JFactory.getClient(asia4jEndpointUrl, ASIAHashtableClient.class);
+		// Create client shared with every executor
+		// For more info go to this link: https://www.edureka.co/blog/broadcast-variables/);
+		final SparkContext sparkContext = input.sparkSession().sparkContext();
+	
+		// Inspired by this snippet: https://www.programcreek.com/java-api-examples/?code=PacktPublishing/Apache-Spark-2x-for-Java-Developers/Apache-Spark-2x-for-Java-Developers-master/src/main/java/com/packt/sfjd/ch7/BroadcastVariable.java
+		final Broadcast<ASIA4J> asiaClient =  
+		sparkContext.broadcast(
+				ASIA4JFactory.getClient(asia4jEndpointUrl, ASIAHashtableClient.class),
+				scala.reflect.ClassTag$.MODULE$.apply(ASIAHashtableClient.class));
 
 		UDF1<String, String> udf = row -> {
 			
-			// TODO: farlo funzionare con non so che criterio e sopratutto con dati veri
-			String result = hClient.reconcile("Berlin", "A.ADM1", 0.1, "geonames");
+			// TODO: farlo funzionare con dati veri
+			String result = asiaClient.value().reconcile("Berlin", "A.ADM1", 0.1, "geonames");
 			System.out.println("***********\n"+result);
 			
 			return result;
